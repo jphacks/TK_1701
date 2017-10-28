@@ -28,12 +28,31 @@ foreach ($events as $event) {
   
 if($event->getMessageType()=="location"){
 replyLocationMessage($bot, $event->getReplyToken(), $event->getTitle( ), $event->getAddress( ), $event->getLatitude( ),  $event->getLongitude( ));
+ $result_location = file_get_contents('http://ubermensch.noor.jp/enPiT/update_user.php?name='+event->getText()+'&mac=""');
+    //ユーザー登録成功
 
 }else{
-    replyTextMessage($bot, $event->getReplyToken(), "我位置情報欲す");
-}
+    $result = file_get_contents('http://ubermensch.noor.jp/enPiT/regist_user.php?name='+event->getText()+'&mac=""');
+    //ユーザー登録失敗
+    if($result==0){
+         replyMultiMessage($bot, $event->getReplyToken(),
+    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder(event->getText()+"さんの登録を行います"),
+     new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder("登録に失敗しました"),
+  );
 
+    }else{//ユーザ登録成功
+         replyMultiMessage($bot, $event->getReplyToken(),
+    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder(event->getText()+"さんの登録を行います"),
+     new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder("登録に成功しました。位置情報を送ってください"),
+      new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder("あなたのコードは以下です。"),
+      new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder("$result"),
+  );
 
+    }
+   
+  }
+
+//
 }
 
 
