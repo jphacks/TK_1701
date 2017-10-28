@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--四角形を描画（不要な辺をマイナスのオフセット値に描画することで上の辺だけ描画）-->
+    <!--負のオフセット値は線の幅よりも絶対値が大きい値-->
+    <item android:left="@dimen/rader_button_negative_offset" android:right="@dimen/rader_button_negative_offset" android:bottom="@dimen/rader_button_negative_offset">
+        <shape>
+            <solid android:color="@color/colorGray" />
+            <stroke android:width="@dimen/rader_button_line_width" android:color="@color/colorAccent" />
+        </shape>
+    </item>
+</layer-list>

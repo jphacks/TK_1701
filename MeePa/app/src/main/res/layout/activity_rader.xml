@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Rader.RaderActivity">
+
+    <!--重ねるViewを、下のもの（カメラ）から順に記述-->
+
+    <!--カメラプレビュー-->
+    <TextureView
+        android:id="@+id/texture_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--位置情報のメッセージ-->
+
+
+    <!--ARでないときの背景-->
+    <!--rader_background2は暗め，無印は明るめ-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/backgroundImageView"
+        android:layout_gravity="center"
+        android:src="@drawable/rader_background2"
+        android:visibility="visible"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:id="@+id/linearLayout_raderMessages">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="measuring..."
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/textView_DistanceMessage"
+            android:layout_gravity="center"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:shadowColor="#de000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="2.0"
+            android:layout_marginTop="20dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text=""
+            android:textColor="@color/colorWhite"
+            android:id="@+id/textView_AccuracyMessage"
+            android:layout_gravity="center_horizontal"
+            android:shadowColor="#de000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="2.0" />
+
+    </LinearLayout>
+
+
+    <!--下側のボタン群+wifiDirectのメッセージ表示テキスト -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/textView_WifiDirectMessage"
+            android:text="WifiDirect OFF時に\nこのテキストエリアをタップすることで非表示にできます。\n"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/colorButtonPressedBackground"
+            android:visibility="gone"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:maxLines="15"
+            />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:id="@+id/linearLayout_bottomButtons"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/button_AR"
+                android:background="@drawable/custom_rader_button_state"
+                android:textColor="@color/colorWhite"
+                android:layout_weight="1"
+                android:textOn="AR ON \n"
+                android:textOff="AR OFF\n"
+                android:checked="false"
+                android:clickable="true"
+                android:gravity="center"
+                android:layout_gravity="top"
+                android:paddingTop="15dp"
+                android:paddingBottom="10dp"
+                android:onClick="onARSwitchButtonClicked"
+                android:shadowColor="#de000000"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="2.0"
+                />
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/button_Vibe"
+                android:background="@drawable/custom_rader_button_state"
+                android:textColor="@color/colorWhite"
+                android:layout_weight="1"
+                android:textOn="Vibe ON \n"
+                android:textOff="Vibe OFF\n"
+                android:checked="true"
+                android:clickable="true"
+                android:layout_gravity="top"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                android:paddingBottom="10dp"
+                android:onClick="onVibeSwitchClicked"
+                android:shadowColor="#de000000"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="2.0"
+                />
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/button_wifiDirect"
+                android:background="@drawable/custom_rader_button_state"
+                android:textColor="@color/colorWhite"
+                android:layout_weight="1"
+                android:textOff="Wifi\nDirect"
+                android:textOn="Wifi\nDirect"
+                android:checked="false"
+                android:clickable="true"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                android:paddingBottom="10dp"
+                android:layout_gravity="top"
+                android:shadowColor="#de000000"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="2.0"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!--デバッグ用情報表示-->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="NO DATA"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/textView_info"
+            android:layout_gravity="right|bottom"
+            android:background="@color/colorButtonPressedBackground"
+            android:visibility="gone" />
+
+        <Button
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:text="i"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/button_info"
+            android:layout_gravity="right|bottom"
+            android:onClick="onClickButtonInfo"
+            android:background="@drawable/custom_button_state"
+            />
+    </LinearLayout>
+
+
+    <!--ARモード時のメッセージ等-->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTransparentBlack"
+        android:id="@+id/linearLayout_ARMassages"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="reqName"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/textView_reqNameAR"
+            android:shadowColor="#de000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="2.0"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Distance"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/textView_distanceAR"
+            android:shadowColor="#de000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="2.0"
+            />
+    </LinearLayout>
+
+</FrameLayout>

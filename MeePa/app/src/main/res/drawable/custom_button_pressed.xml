@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+        <item>
+    <!--一番下に白の長方形塗りつぶし-->
+            <shape android:shape="rectangle" >
+                <solid android:color="@color/colorWhite" />
+            </shape>
+        </item>
+    <!--上の白長方形よりborderPadding分だけ上にずらして背景色で塗りつぶした長方形-->
+        <item android:bottom="@dimen/borderWidthPressed">
+            <shape android:shape="rectangle" >
+                <padding android:bottom="@dimen/borderPaddingPressed" />
+                <solid android:color="@color/colorButtonPressedBackground" />
+            </shape>
+        </item>
+    <item android:bottom="@dimen/borderWidth">
+        <shape android:shape="rectangle" >
+                    <padding android:bottom="@dimen/borderPaddingPressed" />
+            <!--白の枠線-->
+            <stroke
+                android:width="5dp"
+                android:color="@color/colorWhite" />
+        </shape>
+    </item>
+</layer-list>
