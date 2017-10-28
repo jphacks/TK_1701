@@ -132,11 +132,14 @@ public class ShareCameraViewActivity extends Activity {
 
 
         // Request permissions
-        // カメラ，音声のパーミッション
+        // カメラ，(音声)のパーミッション
         if (ContextCompat.checkSelfPermission(activity,
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(activity,
-                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},0);
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+//                && ContextCompat.checkSelfPermission(activity,
+//                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+        ) {
+//            ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},0);
+            ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.CAMERA},0);
         }
         else {
             // 権限がある場合
@@ -257,7 +260,8 @@ public class ShareCameraViewActivity extends Activity {
                     startLocalStream();
                 }
                 else {
-                    Toast.makeText(this,"Failed to access the camera and microphone.\nclick allow when asked for permission.", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(this,"Failed to access the camera and microphone.\nclick allow when asked for permission.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,"Failed to access the camera.\nclick allow when asked for permission.", Toast.LENGTH_LONG).show();
                 }
                 break;
             }
@@ -319,13 +323,16 @@ public class ShareCameraViewActivity extends Activity {
 
         // MediaConstraintsクラスでカメラ映像・マイク音声取得に関するオプションを設定可能
         MediaConstraints constraints = new MediaConstraints();
+
+        constraints.audioFlag = false; // 音声は扱いません
+
         // キャプチャ映像の横サイズ上限の設定（単位：ピクセル）
 //		constraints.maxWidth = 960;
 //		constraints.maxHeight = 540;
         constraints.maxWidth = 1000;
         constraints.maxHeight = 1000;
         // 前面（FRONT），背面（BACK）どちらのカメラを使うか
-        constraints.cameraPosition = MediaConstraints.CameraPositionEnum.FRONT;
+        constraints.cameraPosition = MediaConstraints.CameraPositionEnum.BACK;
 
         // 取得と再生
         Navigator.initialize(_peer);								// Navigatorクラスの初期化

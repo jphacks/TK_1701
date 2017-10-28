@@ -39,6 +39,7 @@ import jp.enpitsu.meepa.Lookfor.LookActivity;
 import jp.enpitsu.meepa.Rader.ARObjects.OpenGLES20.MyGLSurfaceView;
 import jp.enpitsu.meepa.R;
 import jp.enpitsu.meepa.Rader.ARObjects.OpenGLES20.RADER_VALUES;
+import jp.enpitsu.meepa.ShareCameraView.ShareCameraViewActivity;
 import jp.enpitsu.meepa.WiFiDirect.WiFiDirect;
 import jp.enpitsu.meepa.Registor.RegActivity;
 import jp.enpitsu.meepa.WiFiDirect.WiFiDirectEventListener;
@@ -709,5 +710,16 @@ public class RaderActivity extends Activity {
             textView_info.setVisibility(View.GONE);
             isInfoVisible = false;
         }
+    }
+
+
+    // デバッグ用
+    // ShareCameraView
+    public void onClickDistanceText( View view ) {
+
+        // SkyWay（WebRTC）のアクティビティ
+        Intent intent_find = new Intent(RaderActivity.this, ShareCameraViewActivity.class);
+        startActivity(intent_find);
+
     }
 }
