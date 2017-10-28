@@ -33,26 +33,23 @@ foreach ($events as $event) {
   
 if($event->getMessageType()=="location"){
 
-          replyMultiMessage($bot, $event->getReplyToken(),
-    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("位置を登録できませんでした"),
-     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("test"));
-
-    /*
     $date = new DateTime('now', new DateTimeZone('Asia/Tokyo'));
 	$gettime= $date->format('Y-m-d H:i:s');
     //位置情報登録
-    $result_location = file_get_contents('https://noor-ubermensch.ssl-lolipop.jp/enPiT/update_user.php?code='. $_SESSION['code'].'&alt=0&lat='.$event->getLatitude().'&lan='.$event->getLongitude().'&accuracy=0&etime='.$gettime);
+    $code=file_get_contents('https://noor-ubermensch.ssl-lolipop.jp/enPiT/search_lineuser.php?lineuserid='.$userId);
+    error_log("code->$code userid->$userid");
+    $result_location = file_get_contents('https://noor-ubermensch.ssl-lolipop.jp/enPiT/update_user.php?code='. $code.'&alt=0&lat='.$event->getLatitude().'&lan='.$event->getLongitude().'&accuracy=0&etime='.$gettime);
     if($result_location==0){//更新エラー
       replyMultiMessage($bot, $event->getReplyToken(),
     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("位置を登録できませんでした"),
-     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("".$_SESSION['code']));
+     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($code));
     }else{
           replyMultiMessage($bot, $event->getReplyToken(),
     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("位置を登録しました。以下のコードを相手に教えてください"),
-     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("".$_SESSION['code']));
+     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($code));
     }
 
-*/
+
 
 }else{
 	$result = file_get_contents('https://noor-ubermensch.ssl-lolipop.jp/enPiT/regist_user.php?name='. $event->getText() . '&mac=');
@@ -66,12 +63,12 @@ if($event->getMessageType()=="location"){
     }else{//ユーザ登録成功
    
          replyMultiMessage($bot, $event->getReplyToken(),
-    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($userId ."さんの登録を行います"),
+    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($event->getText()  ."さんの登録を行います"),
      new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("登録に成功しました"),
       new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("あなたのコードは以下です。"),
       new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("$result"),
-        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("次に位置情報を送ってください")  );
-
+        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("次に位置情報を送ってください"));
+file_get_contents('https://noor-ubermensch.ssl-lolipop.jp/enPiT/regist_line_user.php?lineuserid='.$userId . '&meepaid='.$result);
     }
 	}
    }
