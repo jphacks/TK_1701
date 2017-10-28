@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/menu_bg2"
+        android:scaleType="fitXY"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="25dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#96ffffff"
+            android:background="#00000000"
+            android:id="@+id/hide_button"
+            android:textSize="40dp"
+            android:gravity="bottom"
+            android:paddingTop="15dp"
+            android:paddingBottom="5dp"
+            android:layout_weight="0.2"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_id"
+            android:layout_gravity="left|center_horizontal"
+            android:textSize="30dp"
+            android:maxLength="20"
+            android:inputType="text"
+            android:hint="type here"
+            android:background="#96ffffff"
+            android:colorControlNormal="@color/colorLightBackground"
+            android:colorControlActivated="@color/colorGreen"
+            android:textCursorDrawable="@color/colorBackground"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
+            android:layout_weight="0.2"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="0dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="REGISTER"
+            android:id="@+id/button_issue"
+            android:textColor="@color/colorWhite"
+            android:textSize="25dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="#5D98D1"
+            android:layout_weight="2"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:id="@+id/id_show"
+            android:text=" "
+            android:textSize="60dp"
+            android:layout_gravity="center"
+            android:gravity="top|center_horizontal"
+            android:background="#50ffffff"
+            android:layout_weight="1"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/error_msg"
+            android:layout_weight="1"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="3"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="300"
+            android:paddingLeft="40dp"
+            android:paddingTop="10dp"
+            android:paddingRight="40dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                >
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_share"
+
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+
+
+
+                    android:background="@drawable/share"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Share"
+                    android:id="@+id/text_share"
+                    android:textSize="30dp"
+                    android:textColor="#96ffffff"
+                    android:layout_weight="1"
+                    android:gravity="center"
+
+                    android:layout_marginTop="10dp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:layout_weight="6"
+
+                >
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_findmode"
+                    android:background="@drawable/search"
+
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
+
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Search"
+                    android:id="@+id/text_search"
+                    android:textSize="30dp"
+                    android:textColor="#96ffffff"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_weight="300"-->
+            <!--android:paddingLeft="40dp"-->
+            <!--android:paddingTop="10dp"-->
+            <!--android:paddingRight="40dp">-->
+            <!--<ImageButton-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/button_share"-->
+                    <!--android:layout_weight="6"-->
+                    <!--android:background="@drawable/share"-->
+                    <!--android:scaleType="fitCenter"-->
+                <!--android:layout_marginLeft="15dp"-->
+                <!--android:layout_marginTop="40dp"-->
+                <!--android:layout_marginRight="20dp"-->
+                <!--android:layout_marginBottom="10dp" />-->
+
+                <!--<ImageButton-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/button_findmode"-->
+                    <!--android:layout_weight="6"-->
+                    <!--android:background="@drawable/search"-->
+                    <!--android:scaleType="fitCenter"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginTop="40dp"-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_marginBottom="10dp" />-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_weight="0.1"-->
+                <!--android:paddingRight="40dp"-->
+                <!--android:paddingLeft ="40dp">-->
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Share"-->
+                    <!--android:id="@+id/text_share"-->
+                    <!--android:textSize="30dp"-->
+                    <!--android:textColor="#96ffffff"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginRight="20dp"/>-->
+
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Search"-->
+                    <!--android:id="@+id/text_search"-->
+                    <!--android:textSize="30dp"-->
+                    <!--android:textColor="#96ffffff"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="15dp"/>-->
+            <!--</LinearLayout>-->
+
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/menu_bg2"
+        android:scaleType="fitXY"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="25dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                android:id="@+id/button" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#96ffffff"
+                android:text="集GO!"
+                android:id="@+id/first_msg"
+                android:textSize="50dp"
+                android:gravity="bottom"
+                android:paddingTop="15dp"
+                android:paddingBottom="5dp"
+                android:layout_weight="0.1"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5">
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButton_regist"
+                android:background="@drawable/button_getid"
+                android:scaleType="fitXY"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=" Get ID"
+                android:id="@+id/text_getid"
+                android:textSize="40dp"
+                android:gravity="left|bottom"
+                android:paddingBottom="5dp" />
+        </FrameLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:layout_margin="10dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5">
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButton_search"
+                android:background="@drawable/button_lets_syugo"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:layout_weight="0.8"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=" Let's 集GO!"
+                android:id="@+id/text_lets"
+                android:textSize="40dp"
+                android:gravity="left|bottom"
+                android:paddingBottom="5dp" />
+        </FrameLayout>
+
+    </LinearLayout>
+</FrameLayout>
+
