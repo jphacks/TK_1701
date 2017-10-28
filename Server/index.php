@@ -24,35 +24,36 @@ foreach ($events as $event) {
     error_log('Non message event has come');
     continue;
   }
+
+//replyTextMessage($bot, $event->getReplyToken(),"test");
   
-  
+  $result;
 if($event->getMessageType()=="location"){
-replyLocationMessage($bot, $event->getReplyToken(), $event->getTitle( ), $event->getAddress( ), $event->getLatitude( ),  $event->getLongitude( ));
- $result_location = file_get_contents('http://ubermensch.noor.jp/enPiT/update_user.php?name='+event->getText()+'&mac=""');
+  replyMultiMessage($bot, $event->getReplyToken(),
+    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result."があなたのコード"),
+     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("登録に失敗しました"));
+
+// $result_location = file_get_contents('http://ubermensch.noor.jp/enPiT/update_user.php?name='+event->getText()+'&mac=""');
     //ユーザー登録成功
 
 }else{
-    $result = file_get_contents('http://ubermensch.noor.jp/enPiT/regist_user.php?name='+event->getText()+'&mac=""');
+    $result = file_get_contents('http://ubermensch.noor.jp/enPiT/regist_user.php?name='. $event->getText() . '&mac=');
     //ユーザー登録失敗
     if($result==0){
          replyMultiMessage($bot, $event->getReplyToken(),
-    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder(event->getText()+"さんの登録を行います"),
-     new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder("登録に失敗しました"),
-  );
+    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($event->getText()."さんの登録を行います"),
+     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("登録に失敗しました"));
 
     }else{//ユーザ登録成功
          replyMultiMessage($bot, $event->getReplyToken(),
-    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder(event->getText()+"さんの登録を行います"),
-     new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder("登録に成功しました。位置情報を送ってください"),
-      new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder("あなたのコードは以下です。"),
-      new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder("$result"),
-  );
-
+    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($event->getText()."さんの登録を行います"),
+     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("登録に成功しました"),
+      new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("あなたのコードは以下です。"),
+      new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("$result"),
+        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("次に位置情報を送ってください")  );
     }
    
   }
-
-//
 }
 
 
