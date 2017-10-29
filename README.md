@@ -1,12 +1,9 @@
 # MeePa
 
-[![MeePa](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](https://youtu.be/Q6coNOIEwdg)
+[![MeePa](https://user-images.githubusercontent.com/32015564/32144461-9ee9b6d2-bcfc-11e7-8d8c-0706a5fda57d.png)](https://youtu.be/Q6coNOIEwdg)
 
 ## 製品概要
 ### 会いたい気持ち × Tech = MeePa
-
-![MeePa](![01](https://user-images.githubusercontent.com/32015564/32144461-9ee9b6d2-bcfc-11e7-8d8c-0706a5fda57d.png)
-)
 
 ### エレベーターピッチ
 ![エレベータピッチ](https://user-images.githubusercontent.com/32015564/32144469-bdbce8c2-bcfc-11e7-80c2-d5ac27248caf.png)
@@ -126,4 +123,3 @@ enPiT 筑波大学分野ワークショップ2016 最優秀/enPiT BizAppBizSysD 
 ### 独自開発技術（Hack Dayで開発したもの）
 #### 2日間に開発した独自の機能・技術
 * AndroidSDKのGPSを使っていたが、精度が悪かったので、FusedLocationProviderApiを導入した
-* 特に力を入れた部分をファイルリンク、またはcommit_idを記載してください（任意）
