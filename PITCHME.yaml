@@ -3,7 +3,7 @@ theme : sky
 
 
 #ロゴアイコンの設定
-#logo : logo.png
+logo : logo.png
 
 
 #フットノートの設定
