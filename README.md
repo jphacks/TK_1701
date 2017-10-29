@@ -18,7 +18,8 @@
 [ 目的地が人で、集合場所にたどり着いてからのサポート機能] が備わっています。  
 
 
-[スライド][https://www.slideshare.net/secret/nX5RgUybtZbcha]
+[スライド](https://www.slideshare.net/secret/o6G9lGOeYamIPz)
+
 
 ### 背景（製品開発のきっかけ、課題等）
 **集合場所に来たのに，待ち合わせ相手が見つからない！**
