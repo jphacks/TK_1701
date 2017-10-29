@@ -1,4 +1,4 @@
-# MeePa
+# MeePa:動画デモ
 
 [![MeePa](https://user-images.githubusercontent.com/32015564/32144461-9ee9b6d2-bcfc-11e7-8d8c-0706a5fda57d.png)](https://youtu.be/Q6coNOIEwdg)
 
