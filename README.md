@@ -1,6 +1,7 @@
 # MeePa:動画デモ
+(下の画像クリックでyoutubeに飛びます)
 
-[![MeePa](https://user-images.githubusercontent.com/32015564/32144461-9ee9b6d2-bcfc-11e7-8d8c-0706a5fda57d.png)](https://youtu.be/Q6coNOIEwdg)
+[![MeePa](https://user-images.githubusercontent.com/32015564/32144461-9ee9b6d2-bcfc-11e7-8d8c-0706a5fda57d.png)](https://youtu.be/qxzyXHlVpKA)
 
 ## 製品概要
 ### 会いたい気持ち × Tech = MeePa
@@ -123,3 +124,5 @@ enPiT 筑波大学分野ワークショップ2016 最優秀/enPiT BizAppBizSysD 
 ### 独自開発技術（Hack Dayで開発したもの）
 #### 2日間に開発した独自の機能・技術
 * AndroidSDKのGPSを使っていたが、精度が悪かったので、FusedLocationProviderApiを導入した
+* LINEBOTを使った位置情報共有
+* SkyWayによる視点共有
