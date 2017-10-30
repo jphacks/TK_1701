@@ -91,19 +91,19 @@ Wifi Directによりオフラインでも端末間で直接位置情報を交換
 
 
 #### フレームワーク・ライブラリ・モジュール
-* OpenGL：ARのため
+* OpenGL ES2.0：ARオブジェクト描画のため
 * SDK of the LINE Messaging API：Line Botのため
 * FusedLocationProviderApi：位置情報取得のため
 
 #### デバイス
 * Nexus7 Android Ver.6.0.1
-* Nexus9
-* Xperia
+* Nexus9 Android Ver.6.0
+* XperiaZ3 Android Ver.5.0.2
 * アクオスゼータ Android Ver.5.0.2
 
 ### 研究内容・事前開発プロダクト（任意）
 #### チーム実績
-enPiT 筑波大学分野ワークショップ2016 最優秀/enPiT BizAppBizSysD 分野ワークショップ2016 最優秀/PBL summit みんなのウェディング賞
+enPiT 筑波大学分野ワークショップ2016 最優秀/enPiT BizAppBizSysD 分野ワークショップ2016 最優秀/PBL summit2017 みんなのウェディング賞
 
 #### 諸星智也(筑波大学大学院)：プロジェクトリーダー
 筑波大学大学院システム情報工学研究科コンピュータサイエンス専攻長特別表彰/JPHACKS innovator認定/JBS日本システムデザインセンター賞/新日鉄住金ソリューションズ賞/サイボウズ賞/enPit 最優秀賞/ミュージックマンシップ vol.8 準優勝
@@ -123,6 +123,6 @@ enPiT 筑波大学分野ワークショップ2016 最優秀/enPiT BizAppBizSysD 
 
 ### 独自開発技術（Hack Dayで開発したもの）
 #### 2日間に開発した独自の機能・技術
-* AndroidSDKのGPSを使っていたが、精度が悪かったので、FusedLocationProviderApiを導入した
+* AndroidSDKから取得したGPSを使っていたが、精度が悪かったので、FusedLocationProviderApiを導入した
 * LINEBOTを使った位置情報共有
 * SkyWayによる視点共有
