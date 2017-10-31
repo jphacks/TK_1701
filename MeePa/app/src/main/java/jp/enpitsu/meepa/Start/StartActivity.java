@@ -37,15 +37,15 @@ public class StartActivity extends Activity {
         setContentView(R.layout.activity_start);
 
         // レイアウトxmlとの結びつけ
-        button_reg = (Button)findViewById( R.id.button_createNewPIN );
-        button_meetUp = (Button)findViewById( R.id.button_meetUp );
-        editText_oppId = (EditText)findViewById( R.id.editText_oppId );
         textView_title = (TextView)findViewById( R.id.textView_title );
+        editText_oppId = (EditText)findViewById( R.id.editText_oppId );
+        button_meetUp = (Button)findViewById( R.id.button_meetUp );
+        button_reg = (Button)findViewById( R.id.button_createNewPIN );
 
         // リスナのセット
         textView_title.setOnClickListener(onClick_TextTileListener);
-        button_reg.setOnClickListener(onClick_ButtonRegListener);
         button_meetUp.setOnClickListener(onClick_ButtonMeetUpListener);
+        button_reg.setOnClickListener(onClick_ButtonRegListener);
 
         //Globalクラス利用
         app = (MeePaApp) this.getApplication();
@@ -68,8 +68,8 @@ public class StartActivity extends Activity {
         }
     };
 
-    //ユーザ登録ボタンの処理
-    private View.OnClickListener onClick_ButtonRegListener = new View.OnClickListener() {
+    // [ Meet Up ]ボタン押下
+    private View.OnClickListener onClick_ButtonMeetUpListener = new View.OnClickListener() {
         public void onClick(View v) {
 
             Intent intent = new Intent(StartActivity.this, RegActivity.class);
@@ -86,6 +86,7 @@ public class StartActivity extends Activity {
             }
 
             // 相手のIDが入力済みか
+            oppID = editText_oppId.getText().toString();
             if( oppID.equals("") == false ) { // 未入力なら何もしない
 
                 toast("会いたい人のIDを入力してください", Toast.LENGTH_LONG, Gravity.BOTTOM);
@@ -98,10 +99,11 @@ public class StartActivity extends Activity {
         }
     };
 
-    //検索モードへボタンの処理
-    private View.OnClickListener onClick_ButtonMeetUpListener = new View.OnClickListener() {
+
+    // [ Create New PIN ]ボタン押下
+    private View.OnClickListener onClick_ButtonRegListener = new View.OnClickListener() {
         public void onClick(View v) {
-            Intent intent = new Intent(StartActivity.this, RaderActivity.class);
+            Intent intent = new Intent(StartActivity.this, RegActivity.class);
             try {
                 startActivity(intent);
             } catch (Exception e) {
@@ -109,6 +111,7 @@ public class StartActivity extends Activity {
             }
         }
     };
+
 
     // サーバと通信，入力された相手のIDに紐付いた情報が正常に取得できればレーダー画面へ
     private void checkOppIdAndMeetUp() {
