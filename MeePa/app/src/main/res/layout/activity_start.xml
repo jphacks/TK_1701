@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/menu_bg2"
-        android:scaleType="fitXY"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,17 +16,12 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:id="@+id/button" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#96ffffff"
-                android:text="集GO!"
+                android:text="MeePa"
                 android:id="@+id/first_msg"
                 android:textSize="50dp"
                 android:gravity="bottom"
