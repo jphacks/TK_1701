@@ -75,11 +75,12 @@ public class StartActivity extends Activity {
             Intent intent = new Intent(StartActivity.this, RegActivity.class);
 
             // 自分のID登録等が済んでいるか
-            if( selfID.equals("") == false ) { // 未登録ならID発行画面に
+            if( selfID.equals("") ) { // 未登録ならID発行画面に
 
                 try {
                     toast( "まずは自分のIDを発行してください", Toast.LENGTH_LONG, Gravity.CENTER );
                     startActivity(intent);
+                    return;
                 } catch (Exception e) {
                     Log.d("StartActivity", "intent error to RegActivity");
                 }
@@ -87,7 +88,7 @@ public class StartActivity extends Activity {
 
             // 相手のIDが入力済みか
             oppID = editText_oppId.getText().toString();
-            if( oppID.equals("") == false ) { // 未入力なら何もしない
+            if( oppID.equals("") ) { // 未入力なら何もしない
 
                 toast("会いたい人のIDを入力してください", Toast.LENGTH_LONG, Gravity.BOTTOM);
                 return;
@@ -98,6 +99,7 @@ public class StartActivity extends Activity {
             }
         }
     };
+
 
 
     // [ Create New PIN ]ボタン押下
@@ -111,6 +113,7 @@ public class StartActivity extends Activity {
             }
         }
     };
+
 
 
     // サーバと通信，入力された相手のIDに紐付いた情報が正常に取得できればレーダー画面へ
