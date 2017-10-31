@@ -155,7 +155,7 @@ public class StartActivity extends Activity {
                                 // 最初から","が現れるまでの部分文字列(なんか先頭文字に改行が入ってるっぽいのでインデックス1～を指定)
                                 oppMacAdr = result.substring(result.indexOf(",") + 1, result.length()); // ","の次の文字から最後までの部分文字列
                                 // グローバルクラスに保存
-                                app.setOpponentUserInfo(oppName, oppID);
+                                app.setOpponentUserInfo(oppName, oppID,oppMacAdr);
                                 app.saveUserInfo();
 
                                 // 問題なければレーダー画面に遷移
