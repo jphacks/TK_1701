@@ -35,6 +35,7 @@
             android:background="@color/colorWhite"
             android:gravity="center"
             android:hint="PIN"
+            android:singleLine="true"
             />
 
         <jp.enpitsu.meepa.Global.CustomButton

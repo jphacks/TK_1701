@@ -32,6 +32,10 @@ public class StartActivity extends Activity {
     private MeePaApp app;
     private String selfID, oppID, oppName, oppMacAdr;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // アクティビティのライフサイクル //////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
@@ -47,15 +51,26 @@ public class StartActivity extends Activity {
         button_meetUp.setOnClickListener(onClick_ButtonMeetUpListener);
         button_reg.setOnClickListener(onClick_ButtonRegListener);
 
+    }
+
+    // 別のアクティビティから帰ってきた際も最新のデータを読み込みたい
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         //Globalクラス利用
         app = (MeePaApp) this.getApplication();
         app.loadUserInfo();
         oppID = app.getOpponentUserId(); // 相手のIDを取得
         selfID = app.getSelfUserId(); // 自分のIDを取得
         if ( oppID.equals("") == false ) editText_oppId.setText( oppID ); // 相手のIDが前回起動時に入力済みの場合
-
     }
 
+
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // ボタン押下時の処理等 ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     //隠しボタン
     private View.OnClickListener onClick_TextTileListener =new View.OnClickListener() {
         public void onClick(View v) {
@@ -162,6 +177,8 @@ public class StartActivity extends Activity {
         httpComLookFor.setUserInfo( oppID );
         httpComLookFor.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
+
+
 
     /*
      * Toast
