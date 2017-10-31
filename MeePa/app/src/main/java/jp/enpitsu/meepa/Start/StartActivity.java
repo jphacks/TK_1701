@@ -37,9 +37,9 @@ public class StartActivity extends Activity {
         text_lets = (TextView)findViewById(R.id.text_lets);
 
         //フォント適用
-        first_msg.setTypeface( Typeface.createFromAsset( getAssets(), "FLOPDesignFont.ttf" ), Typeface.NORMAL );
-        text_get.setTypeface( Typeface.createFromAsset( getAssets(), "FLOPDesignFont.ttf" ), Typeface.NORMAL );
-        text_lets.setTypeface( Typeface.createFromAsset( getAssets(), "FLOPDesignFont.ttf" ), Typeface.NORMAL );
+        first_msg.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
+        text_get.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
+        text_lets.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
 
         btn_hide.setOnClickListener(hideListener);
         imbtn_registmode.setOnClickListener(regListener);
