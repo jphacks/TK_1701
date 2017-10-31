@@ -2,52 +2,62 @@ package jp.enpitsu.meepa.Start;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import jp.enpitsu.meepa.Develop.SecretActivity;
-import jp.enpitsu.meepa.Lookfor.LookActivity;
 import jp.enpitsu.meepa.R;
+import jp.enpitsu.meepa.Rader.RaderActivity;
 import jp.enpitsu.meepa.Registor.RegActivity;
+
+import jp.enpitsu.meepa.Global.MeePaApp;
 
 /**
  * Created by owner on 2016/10/25.
  */
 public class StartActivity extends Activity {
 
-    Button btn_hide;
-    ImageButton imbtn_registmode;
-    ImageButton imbtn_searchmode;
-    TextView first_msg,text_get,text_lets;
+    private Button      button_reg;
+    private Button      button_meetUp;
+    private EditText    editText_oppId;
+    private TextView    textView_title;
+
+    private MeePaApp app;
+    private String selfID, oppID, oppName, oppMacAdr;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        btn_hide = (Button)findViewById(R.id.button);
-        imbtn_registmode = (ImageButton)findViewById(R.id.imageButton_regist);
-        imbtn_searchmode = (ImageButton)findViewById(R.id.imageButton_search);
-        first_msg = (TextView)findViewById(R.id.textView_title);
-        text_get = (TextView)findViewById(R.id.text_getid);
-        text_lets = (TextView)findViewById(R.id.text_lets);
+        // レイアウトxmlとの結びつけ
+        button_reg = (Button)findViewById( R.id.button_createNewPIN );
+        button_meetUp = (Button)findViewById( R.id.button_meetUp );
+        editText_oppId = (EditText)findViewById( R.id.editText_oppId );
+        textView_title = (TextView)findViewById( R.id.textView_title );
 
-        //フォント適用
-        first_msg.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-        text_get.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-        text_lets.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
+        // リスナのセット
+        textView_title.setOnClickListener(onClick_TextTileListener);
+        button_reg.setOnClickListener(onClick_ButtonRegListener);
+        button_meetUp.setOnClickListener(onClick_ButtonMeetUpListener);
 
-        btn_hide.setOnClickListener(hideListener);
-        imbtn_registmode.setOnClickListener(regListener);
-        imbtn_searchmode.setOnClickListener(seaListener);
+        //Globalクラス利用
+        app = (MeePaApp) this.getApplication();
+        app.loadUserInfo();
+        oppID = app.getOpponentUserId(); // 相手のIDを取得
+        selfID = app.getSelfUserId(); // 自分のIDを取得
+        if ( oppID.equals("") == false ) editText_oppId.setText( oppID ); // 相手のIDが前回起動時に入力済みの場合
+
     }
 
     //隠しボタン
-    private View.OnClickListener hideListener =new View.OnClickListener() {
+    private View.OnClickListener onClick_TextTileListener =new View.OnClickListener() {
         public void onClick(View v) {
             Intent intent_hide = new Intent(StartActivity.this, SecretActivity.class);
             try {
@@ -59,26 +69,104 @@ public class StartActivity extends Activity {
     };
 
     //ユーザ登録ボタンの処理
-    private View.OnClickListener regListener = new View.OnClickListener() {
+    private View.OnClickListener onClick_ButtonRegListener = new View.OnClickListener() {
         public void onClick(View v) {
-            Intent intent_reg = new Intent(StartActivity.this, RegActivity.class);
-            try {
-                startActivity(intent_reg);
-            } catch (Exception e){
-                Log.d("StartActivity","intent error to RegActivity");
+
+            Intent intent = new Intent(StartActivity.this, RegActivity.class);
+
+            // 自分のID登録等が済んでいるか
+            if( selfID.equals("") == false ) { // 未登録ならID発行画面に
+
+                try {
+                    toast( "まずは自分のIDを発行してください", Toast.LENGTH_LONG, Gravity.CENTER );
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.d("StartActivity", "intent error to RegActivity");
+                }
+            }
+
+            // 相手のIDが入力済みか
+            if( oppID.equals("") == false ) { // 未入力なら何もしない
+
+                toast("会いたい人のIDを入力してください", Toast.LENGTH_LONG, Gravity.BOTTOM);
+                return;
+            }
+            else { // 入力済みなら
+                // サーバと通信，入力された相手のIDに紐付いた情報が正常に取得できればレーダー画面へ
+                checkOppIdAndMeetUp();
             }
         }
     };
 
     //検索モードへボタンの処理
-    private View.OnClickListener seaListener = new View.OnClickListener() {
+    private View.OnClickListener onClick_ButtonMeetUpListener = new View.OnClickListener() {
         public void onClick(View v) {
-            Intent intent_sea = new Intent(StartActivity.this, LookActivity.class);
+            Intent intent = new Intent(StartActivity.this, RaderActivity.class);
             try {
-                startActivity(intent_sea);
+                startActivity(intent);
             } catch (Exception e) {
                 Log.d("StartActivity", "intent error to MainActivity");
             }
         }
     };
+
+    // サーバと通信，入力された相手のIDに紐付いた情報が正常に取得できればレーダー画面へ
+    private void checkOppIdAndMeetUp() {
+        HttpComLookFor httpComLookFor = new HttpComLookFor(
+                new HttpComLookFor.AsyncTaskCallback() {
+                    @Override
+                    public void postExecute(String result) {
+//                            // 検索結果として"0"が返ってきた場合，ふつうに出力すると"0"だけどbyteとかlengthとか見ると別のものもくっついてるっぽい
+//                            // のでID検索一致0の場合の判定で妙なことしてます
+//                            Log.d("result byte  ", result.getBytes() + ", " + "0".getBytes() );
+//                            Log.d("result length", "" + result.length() );
+//                            Log.d("result char  ", (int)result.charAt(0) + ", " + (int)result.charAt(1) + " : " + (int)'0' );
+
+                        if ("error".equals(result)) { // サーバ側の不具合で検索に失敗した場合"error"が入ってる
+                            editText_oppId.setText("接続エラー");
+                        } else if ('0' == result.charAt(1)) { // reqIDに一致するIDのユーザ名が見つからなかった場合
+                            editText_oppId.setText("失敗");
+                        } else {
+                            try {
+
+                                // resultは「相手のユーザ名,MACアドレス」の形で返ってくる
+                                oppName = result.substring(1, result.indexOf(",") + 0);
+                                // 最初から","が現れるまでの部分文字列(なんか先頭文字に改行が入ってるっぽいのでインデックス1～を指定)
+                                oppMacAdr = result.substring(result.indexOf(",") + 1, result.length()); // ","の次の文字から最後までの部分文字列
+                                // グローバルクラスに保存
+                                app.setOpponentUserInfo(oppName, oppID);
+                                app.saveUserInfo();
+
+                                // 問題なければレーダー画面に遷移
+                                Intent intent = new Intent(StartActivity.this, RaderActivity.class);
+                                try {
+                                    startActivity(intent);
+                                } catch (Exception e) {
+                                    Log.d("StartActivity", "intent error to RaderActivity");
+                                }
+
+                            } catch (Exception e) {
+                                editText_oppId.setText(result);
+                                Log.d("@LookActivity", "postExecute -> error:" + e.toString());
+                            }
+                        }
+                    }
+                }
+        );
+        httpComLookFor.setUserInfo( oppID );
+        httpComLookFor.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    /*
+     * Toast
+     * 引数   msg         : 表示するメッセージ
+     *        time_length : メッセージを表示する時間
+     *        gravity     : メッセージ表示位置
+     */
+    private void toast( String msg, int time_length, int gravity ) {
+
+        Toast toast = Toast.makeText( StartActivity.this, msg, time_length );
+        toast.setGravity( gravity, 0, 0 );
+        toast.show();
+    }
 }

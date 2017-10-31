@@ -4,15 +4,13 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.Button;
 
 import jp.enpitsu.meepa.R;
 
 /**
- * Created by ishilab on 2017/10/31.
+ * xmlでフォントを変更できるボタンのクラス
  */
-
 public class CustomButton extends Button {
 
     private String mFont = "AbadiMTCondensedExtraBold.ttf";
@@ -45,19 +43,18 @@ public class CustomButton extends Button {
     private void getFont(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomButton);
         mFont = a.getString(R.styleable.CustomButton_font);
-        if( mFont == null ) {
-            Log.d("BBBB","AAAAAAAA");
-            mFont = "AbadiMTCondensedExtraBold.ttf";
-        }
+        if( mFont == null ) mFont = "AbadiMTCondensedExtraBold.ttf";
         a.recycle();
     }
 
     /**
-          * フォントを反映
-          */
+      * フォントを反映
+      */
     private void init() {
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), mFontDir + mFont);
         setTypeface(tf);
+
+        setAllCaps(false);
     }
 
 

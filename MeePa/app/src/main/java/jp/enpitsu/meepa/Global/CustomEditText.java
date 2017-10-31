@@ -4,56 +4,58 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import jp.enpitsu.meepa.R;
 
-/*
- * 独自のフォント利用のためのテキストビュー
- * デフォルトのフォント : assets/fonts/AbadiMTCondensedExtraBold.ttf
- * xmlからフォント変更できるようになるよ！
+/**
+ * xmlでフォントを変更できるEditTextのクラス
  */
-public class CustomTextView extends TextView {
+public class CustomEditText extends EditText {
 
     private String mFont = "AbadiMTCondensedExtraBold.ttf";
     private String mFontDir = "fonts/";
 
-    public CustomTextView(Context context, AttributeSet attrs, int defStyle) {
+    public CustomEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         getFont(context, attrs);
         init();
     }
 
-    public CustomTextView(Context context, AttributeSet attrs) {
+    public CustomEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         getFont(context, attrs);
         init();
     }
 
-    public CustomTextView(Context context) {
+    public CustomEditText(Context context) {
         super(context);
         init();
     }
 
 
     /**
-      * フォントファイルを読み込む
-      *
-      * @param context
-      * @param attrs
-      */
+          * フォントファイルを読み込む
+          *
+          * @param context
+          * @param attrs
+          */
     private void getFont(Context context, AttributeSet attrs) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomTextView);
-        mFont = a.getString(R.styleable.CustomTextView_font);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomEditText);
+        mFont = a.getString(R.styleable.CustomEditText_font);
         if( mFont == null ) mFont = "AbadiMTCondensedExtraBold.ttf";
         a.recycle();
     }
 
     /**
-      * フォントを反映
-      */
+          * フォントを反映
+          */
     private void init() {
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), mFontDir + mFont);
         setTypeface(tf);
+
+        setAllCaps(false);
     }
+
+
 }
