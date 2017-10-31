@@ -1,54 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:fontsample="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackground">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:paddingBottom="25dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp">
+        android:layout_weight="9.8"
+        >
 
-
-        <jp.enpitsu.meepa.Global.CustomTextView
-            android:id="@+id/textView_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="MeePa"
-            android:textColor="@color/colorWhite"
-            android:textSize="50dp"
-            fontsample:font="Bauhaus-93_6274.ttf"
-            />
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:orientation="vertical"
+            android:paddingBottom="25dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp">
 
-        <jp.enpitsu.meepa.Global.CustomEditText
-            android:id="@+id/editText_oppId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            android:gravity="center"
-            android:hint="PIN"
-            android:singleLine="true"
-            />
 
-        <jp.enpitsu.meepa.Global.CustomButton
-            android:id="@+id/button_meetUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Meep Up"
-            android:textColor="@color/colorWhite"
-            android:background="@color/colorGray"
-            />
+            <jp.enpitsu.meepa.Global.CustomTextView
+                android:id="@+id/textView_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="MeePa"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/fontSize_Large"
+                fontsample:font="Bauhaus-93_6274.ttf" />
 
-    </LinearLayout>
+            <jp.enpitsu.meepa.Global.CustomEditText
+                android:id="@+id/editText_oppId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorWhite"
+                android:gravity="center"
+                android:hint="PIN"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:singleLine="true"
+                android:textSize="@dimen/fontSize_Regular" />
 
+            <jp.enpitsu.meepa.Global.CustomButton
+                android:id="@+id/button_meetUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorGray"
+                android:text="Meep Up"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/fontSize_Regular" />
+
+        </LinearLayout>
+    </RelativeLayout>
     <jp.enpitsu.meepa.Global.CustomButton
         android:id="@+id/button_createNewPIN"
         android:layout_width="match_parent"
@@ -58,7 +72,10 @@
         android:background="@color/colorOrange"
         android:gravity="center"
         android:text="Create New PIN"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/colorWhite"
+        android:layout_weight="0.2"
+        android:textSize="@dimen/fontSize_Regular"
+        />
 
-</RelativeLayout>
+</LinearLayout>
 
