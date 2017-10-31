@@ -32,7 +32,7 @@ public class StartActivity extends Activity {
         btn_hide = (Button)findViewById(R.id.button);
         imbtn_registmode = (ImageButton)findViewById(R.id.imageButton_regist);
         imbtn_searchmode = (ImageButton)findViewById(R.id.imageButton_search);
-        first_msg = (TextView)findViewById(R.id.first_msg);
+        first_msg = (TextView)findViewById(R.id.textView_title);
         text_get = (TextView)findViewById(R.id.text_getid);
         text_lets = (TextView)findViewById(R.id.text_lets);
 

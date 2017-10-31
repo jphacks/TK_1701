@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:fontsample="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackground">
 
     <LinearLayout
@@ -17,17 +18,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <jp.enpitsu.meepa.Global.CustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#96ffffff"
-                android:text="MeePa"
-                android:id="@+id/first_msg"
+                android:text="@string/app_name"
+                android:id="@+id/textView_title"
                 android:textSize="50dp"
-                android:gravity="bottom"
+                android:gravity="center"
                 android:paddingTop="15dp"
                 android:paddingBottom="5dp"
-                android:layout_weight="0.1"/>
+                android:layout_weight="0.1"
+                fontsample:font="Bauhaus-93_6274.ttf"
+                />
         </FrameLayout>
 
         <FrameLayout
@@ -35,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="5">
 
-            <ImageButton
+            <jp.enpitsu.meepa.Global.CustomButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageButton_regist"
