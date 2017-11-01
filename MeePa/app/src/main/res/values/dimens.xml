@@ -11,6 +11,8 @@
     <dimen name="fontSize_Regular">18dp</dimen>
     <dimen name="fontSize_Large">70dp</dimen>
 
+    <dimen name="horizontal_margin">30dp</dimen>
+
     <dimen name="rader_button_negative_offset">-5dp</dimen>
     <dimen name="rader_button_line_width">2dp</dimen>
 </resources>

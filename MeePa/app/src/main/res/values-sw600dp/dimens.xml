@@ -8,4 +8,6 @@
     <dimen name="fontSize_Regular">25dp</dimen>
     <dimen name="fontSize_Large">100dp</dimen>
 
+    <dimen name="horizontal_margin">110dp</dimen>
+
 </resources>
