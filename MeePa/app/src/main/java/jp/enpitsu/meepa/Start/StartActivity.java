@@ -2,6 +2,7 @@ package jp.enpitsu.meepa.Start;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +51,18 @@ public class StartActivity extends Activity {
         textView_title.setOnClickListener(onClick_TextTileListener);
         button_meetUp.setOnClickListener(onClick_ButtonMeetUpListener);
         button_reg.setOnClickListener(onClick_ButtonRegListener);
+
+
+        // URLから暗黙的intentで起動
+        Intent intent = getIntent();
+        Uri uri = intent.getData();  // uriの取得
+        if( uri != null ) { // nullでないとき
+            // uriは，「 MeePa://shareID/[reqID] 」の形で来る
+            String[] parse = uri.toString().split("/"); // "/"で分割
+            oppID = parse[ parse.length-1 ]; // 一番最後の要素が共有されたID
+        }
+        editText_oppId.setText( oppID );
+
 
     }
 
