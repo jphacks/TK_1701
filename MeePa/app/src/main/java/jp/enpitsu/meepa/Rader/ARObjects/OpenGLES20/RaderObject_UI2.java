@@ -15,81 +15,48 @@ import java.util.ArrayList;
 /**
  * Created by iyobe on 2016/09/28.
  */
-
-class Buffers {
-
-    FloatBuffer vertexBuffer;   //頂点バッファ
-    ByteBuffer  indexBuffer;    //インデックスバッファ
-    FloatBuffer normalBuffer;   //法線バッファ
-
-};
-
-
-public class RaderObject_UI {
+public class RaderObject_UI2 {
 
     float frameCount;
 
     //バッファ
     private ArrayList<CircleBuffers> circleBuffersesList;
 
-    // レーダー圏外時用のうっすらな円弧
     private FloatBuffer arc_vertexBuffer;//頂点バッファ
     private ByteBuffer  arc_indexBuffer; //インデックスバッファ
     private FloatBuffer arc_normalBuffer;//法線バッファ
-    // うっすらな円弧の円周上の線
-    private FloatBuffer arcLine_vertexBuffer;//頂点バッファ
-    private ByteBuffer  arcLine_indexBuffer; //インデックスバッファ
-    private FloatBuffer arcLine_normalBuffer;//法線バッファ
 
-    // レーダーの背景
     private FloatBuffer fillCircle_vertexBuffer;//頂点バッファ
     private ByteBuffer  fillCircle_indexBuffer; //インデックスバッファ
     private FloatBuffer fillCircle_normalBuffer;//法線バッファ
 
-    // レーダー上の空いての位置
     private FloatBuffer target_vertexBuffer;//頂点バッファ
     private ByteBuffer  target_indexBuffer; //インデックスバッファ
     private FloatBuffer target_normalBuffer;//法線バッファ
 
-    // まわるやつ
     private FloatBuffer bar_vertexBuffer;//頂点バッファ
     private ByteBuffer  bar_indexBuffer; //インデックスバッファ
     private FloatBuffer bar_normalBuffer;//法線バッファ
 
-    // 中間領域用の半透明の輪
     private FloatBuffer ring_vertexBuffer;//頂点バッファ
     private ByteBuffer  ring_indexBuffer; //インデックスバッファ
     private FloatBuffer ring_normalBuffer;//法線バッファ
 
-    // 枠線とか
     private FloatBuffer frameLines_vertexBuffer;//頂点バッファ
     private ByteBuffer  frameLines_indexBuffer; //インデックスバッファ
     private FloatBuffer frameLines_normalBuffer;//法線バッファ
 
-    // 相手のいる領域
     private FloatBuffer arcRing_vertexBuffer;//頂点バッファ
     private ByteBuffer  arcRing_indexBuffer; //インデックスバッファ
     private FloatBuffer arcRing_normalBuffer;//法線バッファ
 
-    private Buffers outerRing;  // いっちゃん外側の輪
-    private Buffers midRing;    // 真ん中の輪
-    private Buffers innerRing;  // いっちゃん内側の輪
-    private Buffers arcRing_oppArea; // 相手のいる領域を示す弧
-    private Buffers northMark;  // 北を示すマーク
-
-    private Buffers bar;        // まわるやつ
+    private FloatBuffer arcLine_vertexBuffer;//頂点バッファ
+    private ByteBuffer  arcLine_indexBuffer; //インデックスバッファ
+    private FloatBuffer arcLine_normalBuffer;//法線バッファ
 
 
-    RaderObject_UI() {
 
-        //外側の半径，内側の半径，台形近似する台形の数，台形を高さ方向分割する数, 格納先バッファ
-        outerRing = initRing2( RADER_VALUES.RADIUS, RADER_VALUES.RADIUS-0.1f, 50, 1);    // いっちゃん外側の輪
-        midRing   = initRing2( RADER_VALUES.BORDER_NEAR, RADER_VALUES.BORDER_NEAR-0.05f, 50, 1);     // 真ん中の輪
-        innerRing = initRing2( RADER_VALUES.BORDER_NEAREST, RADER_VALUES.BORDER_NEAREST-0.05f, 50, 1);   // いっちゃん内側の輪
-
-        bar = initBar2( 0f, 0f, 0f, RADER_VALUES.RADIUS-0.1f ); // まわるやつ
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
+    RaderObject_UI2() {
         circleBuffersesList = new ArrayList<CircleBuffers>();
 
         for( float i = RADER_VALUES.RADIUS; i >= RADER_VALUES.RADIUS - 0.05f; i = i - 0.007f ) {
@@ -110,157 +77,7 @@ public class RaderObject_UI {
         initArcLine( 0f, 0f, 0f, RADER_VALUES.RADIUS );
     }
 
-    // 輪の頂点準備
-    //外側の半径，内側の半径，台形近似する台形の数，台形を高さ方向分割する数, 格納先バッファ
-    public Buffers initRing2(float RadiusOuter, float RadiusInner, int nSlices, int nStacks) {
-        // TODO : 端の部分詰める
-        Buffers buffers = new Buffers();
-        //頂点座標
-        int numPoints = (nSlices+1)*(nStacks+1);
-        int nIndexs = nSlices*(nStacks+1)*2;
-        int sizeArray=numPoints*3;
-        float[] vertexs= new float[sizeArray];
-        float[] normals= new float[sizeArray];
-        byte[] indexs= new byte[nIndexs];
-        int i,j;
-        double theta0=2.0*3.1415956535/nSlices;
-        double theta;
-        double dr = (RadiusOuter-RadiusInner)/nStacks;
-        double r;
-        int p=0;
-        for (i=0; i<=nSlices; i++) {
-            theta = theta0 * i;
-            for (j = 0; j <= nStacks; j++) {
-                r = (RadiusOuter - j * dr);
-                vertexs[p++] = (float) (r * Math.sin(theta));
-                vertexs[p++] = (float) (r * Math.cos(theta));
-                vertexs[p++] = 0f;
-            }
-        }
-        p=0;
-        for (i=0; i<=nSlices; i++) {
-            for (j = 0; j <= nStacks; j++) {
-                normals[p++] = 0f;
-                normals[p++] = 0f;
-                normals[p++] = 1f;
-            }
-        }
-        p=0;
-        int nStacks1=nStacks+1;
-        for (i=0; i<nSlices; i++) {
-            for (j = 0; j <= nStacks; j++) {
-                indexs[p++] = (byte)(i*nStacks1+j);
-                indexs[p++] = (byte)((i+1)*nStacks1+j);
-            }
-        }
-        buffers.vertexBuffer = makeFloatBuffer(vertexs);
-        buffers.indexBuffer = makeByteBuffer( indexs );
-        buffers.normalBuffer = makeFloatBuffer(normals);
 
-        return buffers;
-    }
-
-    // 回すための線の準備
-    private Buffers initBar2( float centerX, float centerY, float centerZ, float r) {
-        Buffers buffers = new Buffers();
-        int length=100+2;
-
-        float [] vertexs = new float[ (100+2) * 3 ];//頂点の数はn角形の場合はn*3*2になる
-        byte [] indexs = new byte[ (100+2) * 3 ];
-
-        //頂点配列情報
-        vertexs[0] = centerX;
-        vertexs[1] = centerY;
-        vertexs[2] = centerZ;
-        indexs[0] = 0;
-        int count = 0;
-        for (int i=1;i<length;i++) {
-
-            float angle=(float)(2*Math.PI*i/(length-2));
-            vertexs[i*3+0]=(float)( centerX+Math.cos(angle)*r);
-            vertexs[i*3+1]=(float)(-centerY+Math.sin(angle)*r);
-            vertexs[i*3+2]=centerZ;
-        }
-        count = 0;
-        for( int i = 0; count < indexs.length; ++i ) {
-            indexs[ count ] = (byte)0;
-            indexs[ count+1 ] = (byte)(i+1);
-            indexs[ count+2 ] = (byte)(i+2);
-            count += 3;
-        }
-        buffers.vertexBuffer = makeFloatBuffer( vertexs );
-        buffers.indexBuffer = makeByteBuffer( indexs );
-
-        //法線バッファの生成
-        float[] normals= new float[ vertexs.length ];
-        for( int j = 0; j < vertexs.length; j += 3 ) {
-            normals[j  ] = 0.0f;
-            normals[j+1] = 0.0f;
-            normals[j+2] = 1.0f;
-        }
-        float div=(float)Math.sqrt(
-                (1.0f*1.0f)+(1.0f*1.0f)+(1.0f*1.0f));
-        for (int i=0;i<normals.length;i++) normals[i]/=div;
-        buffers.normalBuffer = makeFloatBuffer(normals);
-
-        return buffers;
-    }
-
-    // 輪の弧？弧の線に幅をもたせたやつ？の準備
-    public Buffers initArcRing2(float RadiusOuter, float RadiusInner, int nSlices, int nStacks) {
-        Buffers buffers = new Buffers();
-        //頂点座標
-        int numPoints = (nSlices+1)*(nStacks+1);
-        int nIndexs = nSlices*(nStacks+1)*2;
-        int sizeArray=numPoints*3;
-        float[] vertexs= new float[sizeArray];
-        float[] normals= new float[sizeArray];
-        byte[] indexs= new byte[nIndexs];
-        int i,j;
-        double theta0=2.0*3.1415956535/nSlices;
-        double theta;
-        double dr = (RadiusOuter-RadiusInner)/nStacks;
-        double r;
-
-        nSlices /= 6;
-
-        int p=0;
-        for (i=0; i<=nSlices; i++) {
-            theta = theta0 * i;
-            for (j = 0; j <= nStacks; j++) {
-                r = (RadiusOuter - j * dr);
-                vertexs[p++] = (float) (r * Math.sin(theta));
-                vertexs[p++] = (float) (r * Math.cos(theta));
-                vertexs[p++] = 0f;
-            }
-        }
-        p=0;
-        for (i=0; i<=nSlices; i++) {
-            for (j = 0; j <= nStacks; j++) {
-                normals[p++] = 0f;
-                normals[p++] = 0f;
-                normals[p++] = 1f;
-            }
-        }
-        p=0;
-        int nStacks1=nStacks+1;
-        for (i=0; i<nSlices; i++) {
-            for (j = 0; j <= nStacks; j++) {
-                indexs[p++] = (byte)(i*nStacks1+j);
-                indexs[p++] = (byte)((i+1)*nStacks1+j);
-            }
-            indexs[p] = indexs[p-3];
-            indexs[p+1] = indexs[p-2];
-        }
-
-        buffers.vertexBuffer = makeFloatBuffer(vertexs);
-        buffers.indexBuffer = makeByteBuffer( indexs );
-        buffers.normalBuffer = makeFloatBuffer(normals);
-
-        return buffers;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // レーダーの枠線等を描画する準備
     private void initFrameLines( float centerX, float centerY, float centerZ, float r ) {
         int length = 100;
