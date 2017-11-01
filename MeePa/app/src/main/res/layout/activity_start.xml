@@ -23,7 +23,11 @@
             android:paddingBottom="25dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:paddingTop="16dp">
+            android:paddingTop="16dp"
+
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
 
 
             <jp.enpitsu.meepa.Global.CustomTextView
@@ -34,7 +38,7 @@
                 android:text="MeePa"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/fontSize_Large"
-                fontsample:font="Bauhaus-93_6274.ttf" />
+                fontsample:font="Bauhaus-93_6274.ttf"/>
 
             <jp.enpitsu.meepa.Global.CustomEditText
                 android:id="@+id/editText_oppId"
@@ -42,11 +46,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="11dp"
                 android:background="@color/colorWhite"
                 android:gravity="center"
                 android:hint="PIN"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
                 android:singleLine="true"
                 android:textSize="@dimen/fontSize_Regular" />
 

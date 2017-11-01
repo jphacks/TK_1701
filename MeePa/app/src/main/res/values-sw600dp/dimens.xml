@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    タブレット用のレイアウト
+    sw600dp = 最小幅600dp以上（タブレットの幅は全部600dp以上）
+ -->
+<resources>
+
+    <dimen name="fontSize_Regular">25dp</dimen>
+    <dimen name="fontSize_Large">100dp</dimen>
+
+</resources>
