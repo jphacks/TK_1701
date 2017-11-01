@@ -135,8 +135,6 @@ public class RaderActivity extends Activity {
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-        backgroundImageView = (ImageView)findViewById( R.id.backgroundImageView );
-
         button_AR          = (ToggleButton)findViewById( R.id.button_AR );
         button_Vibration  = (ToggleButton)findViewById( R.id.button_Vibe );
         button_WifiDirect = (ToggleButton)findViewById( R.id.button_wifiDirect );
@@ -155,13 +153,13 @@ public class RaderActivity extends Activity {
         textView_info = (TextView)findViewById( R.id.textView_info );
 
         // フォント設定
-        button_AR.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-        button_WifiDirect.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-        button_Vibration.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-        textView_DistanceMessage.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-        textView_AccuracyMessage.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-        textView_reqNameAR.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-        textView_distanceAR.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
+//        button_AR.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
+//        button_WifiDirect.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
+//        button_Vibration.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
+//        textView_DistanceMessage.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
+//        textView_AccuracyMessage.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
+//        textView_reqNameAR.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
+//        textView_distanceAR.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
 
 
         textView_WifiDirectMessage = (TextView)findViewById( R.id.textView_WifiDirectMessage );
