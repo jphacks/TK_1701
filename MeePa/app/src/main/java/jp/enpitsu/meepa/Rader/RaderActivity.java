@@ -60,7 +60,8 @@ public class RaderActivity extends Activity {
 
     LinearLayout linearLayout_raderMessages;
     TextView textView_DistanceMessage;
-    TextView textView_AccuracyMessage;
+    TextView textView_oppName;
+//    TextView textView_AccuracyMessage;
 
     LinearLayout linearLayout_ARMessages;
     TextView textView_reqNameAR;
@@ -135,13 +136,17 @@ public class RaderActivity extends Activity {
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
+
+        // レイアウト(xml)との結びつけ
         button_AR          = (ToggleButton)findViewById( R.id.button_AR );
         button_Vibration  = (ToggleButton)findViewById( R.id.button_Vibe );
         button_WifiDirect = (ToggleButton)findViewById( R.id.button_wifiDirect );
 
         linearLayout_raderMessages = (LinearLayout)findViewById( R.id.linearLayout_raderMessages );
         textView_DistanceMessage = (TextView)findViewById( R.id.textView_DistanceMessage );
-        textView_AccuracyMessage = (TextView)findViewById( R.id.textView_AccuracyMessage );
+        textView_oppName = (TextView)findViewById( R.id.textView_oppName );
+        textView_oppName.setText( oppName ); // 相手のユーザ名セット
+//        textView_AccuracyMessage = (TextView)findViewById( R.id.textView_AccuracyMessage );
 
         linearLayout_ARMessages = (LinearLayout)findViewById( R.id.linearLayout_ARMassages );
         textView_reqNameAR = (TextView)findViewById( R.id.textView_reqNameAR );
@@ -539,16 +544,16 @@ public class RaderActivity extends Activity {
 
         // 距離メッセージ変更
         textView_distanceAR.setText( (int)results[0] + "m");
-        if( results[0] <= 20 ) textView_DistanceMessage.setText("近いよ");
-        else if( results[0] == 0 ) textView_DistanceMessage.setText("やばいよ");
-        else textView_DistanceMessage.setText("遠いよ");
+        if( results[0] <= 20 ) textView_DistanceMessage.setText("near");
+        else if( results[0] == 0 ) textView_DistanceMessage.setText("near!!!!");
+        else textView_DistanceMessage.setText("far");
 
         // 精度メッセージ変更
-        if( oppLocationData.acc <= 3 ) textView_AccuracyMessage.setText("精度良好かも");
-        else if( oppLocationData.acc > 3 && oppLocationData.acc <= 10 ) textView_AccuracyMessage.setText("ふつうの精度");
-        else if ( oppLocationData.acc >= 15 ) textView_AccuracyMessage.setText("精度ひどいよ");
-//        else if ( data.acc >= 15 ) textView_AccuracyMessage.setText("不安な精度");
-        else textView_AccuracyMessage.setText( "" );
+//        if( oppLocationData.acc <= 3 ) textView_AccuracyMessage.setText("精度良好かも");
+//        else if( oppLocationData.acc > 3 && oppLocationData.acc <= 10 ) textView_AccuracyMessage.setText("ふつうの精度");
+//        else if ( oppLocationData.acc >= 15 ) textView_AccuracyMessage.setText("精度ひどいよ");
+////        else if ( data.acc >= 15 ) textView_AccuracyMessage.setText("不安な精度");
+//        else textView_AccuracyMessage.setText( "" );
 
 
 
