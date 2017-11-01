@@ -83,9 +83,9 @@ public class RaderObject_UI {
     RaderObject_UI() {
 
         //外側の半径，内側の半径，台形近似する台形の数，台形を高さ方向分割する数, 格納先バッファ
-        outerRing = initRing2( RADER_VALUES.RADIUS, RADER_VALUES.RADIUS-0.1f, 50, 1);    // いっちゃん外側の輪
-        midRing   = initRing2( RADER_VALUES.BORDER_NEAR, RADER_VALUES.BORDER_NEAR-0.05f, 50, 1);     // 真ん中の輪
-        innerRing = initRing2( RADER_VALUES.BORDER_NEAREST, RADER_VALUES.BORDER_NEAREST-0.05f, 50, 1);   // いっちゃん内側の輪
+        outerRing = initRing2( RADER_VALUES.RADIUS, RADER_VALUES.RADIUS-0.15f, 50, 1);    // いっちゃん外側の輪
+        midRing   = initRing2( RADER_VALUES.BORDER_NEAR, RADER_VALUES.BORDER_NEAR-0.02f, 50, 1);     // 真ん中の輪
+        innerRing = initRing2( RADER_VALUES.BORDER_NEAREST, RADER_VALUES.BORDER_NEAREST-0.02f, 50, 1);   // いっちゃん内側の輪
 
         bar = initBar2( 0f, 0f, 0f, RADER_VALUES.RADIUS-0.1f ); // まわるやつ
 
@@ -670,6 +670,11 @@ public class RaderObject_UI {
             Matrix.rotateM(GLES.mMatrix, 0, RADER_VALUES.northDirection, 0, 0, 1); // 北の方向に回転
             GLES.updateMatrix();
             drawFrameLines( 0f, 150f/255f, 255f/255f, 1f );      // レーダーの枠線等
+
+            drawRing2( outerRing, 255f/255f, 189f/255f,  48f/255f, 1f ); // いっちゃん外側の輪（オレンジ）
+            drawRing2(   midRing, 70f/255f,   68f/255f,  69f/255f, 1f ); // 真ん中の輪（グレー）
+            drawRing2( innerRing, 255f/255f,  189f/255f, 48f/255f, 1f ); // いっちゃん内側の輪（オレンジ）
+
             Matrix.rotateM(GLES.mMatrix, 0, RADER_VALUES.ROTATE_TO_DEFAULT, 0, 0, 1); // 初期配置（レーダーが真上を指すように回転）
             Matrix.rotateM(GLES.mMatrix, 0, -RADER_VALUES.rotation, 0, 0, 1); // 初期配置（レーダーが真上を指すように回転）
 
@@ -795,6 +800,30 @@ public class RaderObject_UI {
         }
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // 輪の弧（幅をもたせた弧の線）描画
+    public void drawRing2( Buffers buffers, float r, float g, float b, float a ) {
+        //頂点バッファの指定
+        GLES20.glVertexAttribPointer( GLES.positionHandle, 3,
+                GLES20.GL_FLOAT, false, 0, buffers.vertexBuffer );
+
+        //法線バッファの指定
+        GLES20.glVertexAttribPointer( GLES.normalHandle, 3,
+                GLES20.GL_FLOAT, false, 0, buffers.normalBuffer );
+
+        //描画
+        setMaterial( r, g, b, a );
+        buffers.indexBuffer.position(0);
+        GLES20.glDrawElements( GLES20.GL_TRIANGLE_STRIP,
+                buffers.indexBuffer.capacity(), GLES20.GL_UNSIGNED_BYTE, buffers.indexBuffer );
+        buffers.indexBuffer.position(0);
+        GLES20.glDrawElements( GLES20.GL_TRIANGLE_STRIP,
+                3, GLES20.GL_UNSIGNED_BYTE, buffers.indexBuffer );
+        buffers.indexBuffer.position(buffers.indexBuffer.capacity()-3);
+        GLES20.glDrawElements( GLES20.GL_TRIANGLE_STRIP,
+                3, GLES20.GL_UNSIGNED_BYTE, buffers.indexBuffer );
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // 円弧の描画
