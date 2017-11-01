@@ -8,49 +8,52 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/horizontal_margin"
         android:layout_marginRight="@dimen/horizontal_margin"
-        android:paddingLeft="16dp"
-        android:paddingTop="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="25dp"
-
         android:focusable="true"
         android:focusableInTouchMode="true"
-        >
+        android:orientation="vertical"
+        android:paddingBottom="25dp"
+
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
 
 
         <jp.enpitsu.meepa.Global.CustomTextView
             android:id="@+id/textView_complain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:gravity="center"
             android:text="User Name"
-            android:textColor="@color/colorGray"
-            android:textSize="@dimen/fontSize_Regular"
-            />
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/fontSize_MidLarge" />
 
         <jp.enpitsu.meepa.Global.CustomEditText
             android:id="@+id/editText_userInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text=""
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_horizontal"
             android:hint=""
-            android:textColor="@color/colorGray"
+            android:singleLine="true"
+            android:text="aaa"
+            android:textColor="@color/colorWhite"
             android:textSize="@dimen/fontSize_Regular"
-            />
+            android:theme="@style/EditTextStyle" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:layout_gravity="right"
-            >
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
             <jp.enpitsu.meepa.Global.CustomButton
                 android:id="@+id/button_cancel"
@@ -59,9 +62,8 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:text="Cancel"
-                android:textSize="@dimen/fontSize_Regular"
-                android:textColor="@color/colorGray"
-                />
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/fontSize_Regular" />
 
             <jp.enpitsu.meepa.Global.CustomButton
                 android:id="@+id/button_create"
@@ -70,9 +72,8 @@
                 android:layout_weight="1"
                 android:background="@color/colorGray"
                 android:text="Create"
-                android:textSize="@dimen/fontSize_Regular"
                 android:textColor="@color/colorWhite"
-                />
+                android:textSize="@dimen/fontSize_Regular" />
 
             <jp.enpitsu.meepa.Global.CustomButton
                 android:id="@+id/button_share"
@@ -81,10 +82,9 @@
                 android:layout_weight="1"
                 android:background="@color/colorGray"
                 android:text="Share"
-                android:textSize="@dimen/fontSize_Regular"
                 android:textColor="@color/colorWhite"
-                android:visibility="gone"
-                />
+                android:textSize="@dimen/fontSize_Regular"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
