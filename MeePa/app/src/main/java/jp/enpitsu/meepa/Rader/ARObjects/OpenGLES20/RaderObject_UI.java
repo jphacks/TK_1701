@@ -89,6 +89,7 @@ public class RaderObject_UI {
 
         bar = initBar2( 0f, 0f, 0f, RADER_VALUES.RADIUS-0.1f ); // まわるやつ
 
+        northMark = initNorthMark( RADER_VALUES.BORDER_NEAR-0.06f, ((RADER_VALUES.RADIUS/3)-0.15f)/2 ); // 北側を示すマーク
         ////////////////////////////////////////////////////////////////////////////////////////////
         circleBuffersesList = new ArrayList<CircleBuffers>();
 
@@ -260,8 +261,53 @@ public class RaderObject_UI {
         return buffers;
     }
 
+    // 北側を示すマークの準備
+    public Buffers initNorthMark( float RadiusOuter, float height ){
+        Buffers buffers = new Buffers();
+
+        float[] vertexs = new float[ 3 * 3 ];//頂点の数は三角形だから(3つの頂点) * (x, y, z 座標) =  3 * 3
+        byte [] indexs  = new byte[ 3 ]; // 頂点の数
+
+        // 縦線
+        int index = 0;
+        vertexs[ index*3   ] =  0.0f;               // x1
+        vertexs[ index*3+1 ] =  RadiusOuter;        // y1
+        vertexs[ index*3+2 ] =  0.0f;               // z1
+        indexs[ index ] = (byte)index; ++index;
+
+        vertexs[ index*3   ] =  -height/3 * 1.7f;          // x2
+        vertexs[ index*3+1 ] =  RadiusOuter-height; // y2
+        vertexs[ index*3+2 ] =  0.0f;               // z2
+        indexs[ index ] = (byte)index; ++index;
+
+        vertexs[ index*3   ] =  height/3 * 1.7f;           // x3
+        vertexs[ index*3+1 ] =  RadiusOuter-height; // y3
+        vertexs[ index*3+2 ] =  0.0f;               // z3
+        indexs[ index ] = (byte)index; ++index;
+
+
+
+        //法線バッファの生成
+        float[] normals= new float[ vertexs.length ];
+        for( int j = 0; j < vertexs.length; j += 3 ) {
+            normals[j  ] = 0.0f;
+            normals[j+1] = 0.0f;
+            normals[j+2] = 1.0f;
+        }
+        float div=(float)Math.sqrt(
+                (1.0f*1.0f)+(1.0f*1.0f)+(1.0f*1.0f));
+        for (int i=0;i<normals.length;i++) normals[i]/=div;
+
+        buffers.vertexBuffer = makeFloatBuffer( vertexs );
+        buffers.indexBuffer  = makeByteBuffer( indexs );
+        buffers.normalBuffer = makeFloatBuffer( normals );
+
+        return buffers;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // レーダーの枠線等を描画する準備
+    // 引数は円の中心の(x,y,z)座標とr(半径)
     private void initFrameLines( float centerX, float centerY, float centerZ, float r ) {
         int length = 100;
 
@@ -670,6 +716,7 @@ public class RaderObject_UI {
             Matrix.rotateM(GLES.mMatrix, 0, RADER_VALUES.northDirection, 0, 0, 1); // 北の方向に回転
             GLES.updateMatrix();
             drawFrameLines( 0f, 150f/255f, 255f/255f, 1f );      // レーダーの枠線等
+            drawNorthMark( northMark, 255f/255f, 189f/255f,  48f/255f, 1f ); // 北側を示すマーク
 
             drawRing2( outerRing, 255f/255f, 189f/255f,  48f/255f, 1f ); // いっちゃん外側の輪（オレンジ）
             drawRing2(   midRing, 70f/255f,   68f/255f,  69f/255f, 1f ); // 真ん中の輪（グレー）
@@ -679,7 +726,7 @@ public class RaderObject_UI {
             Matrix.rotateM(GLES.mMatrix, 0, -RADER_VALUES.rotation, 0, 0, 1); // 初期配置（レーダーが真上を指すように回転）
 
             GLES.updateMatrix();
-            drawFillCircle( 0f, 0f, 0f, 0.2f );   // 半透明の円
+//            drawFillCircle( 0f, 0f, 0f, 0.2f );   // 半透明の円
             if( RADER_VALUES.distance_state == -1 ) {
                 drawFillArc( 1f, 0.2f, 0.5f, 0.025f);       // 円弧
             }
@@ -823,6 +870,24 @@ public class RaderObject_UI {
         buffers.indexBuffer.position(buffers.indexBuffer.capacity()-3);
         GLES20.glDrawElements( GLES20.GL_TRIANGLE_STRIP,
                 3, GLES20.GL_UNSIGNED_BYTE, buffers.indexBuffer );
+    }
+
+    // レーダーの枠線等の描画
+    private void drawNorthMark( Buffers buffers, float r, float g, float b, float a ) {
+        //頂点バッファの指定
+        GLES20.glVertexAttribPointer( GLES.positionHandle, 3,
+                GLES20.GL_FLOAT, false, 0, buffers.vertexBuffer );
+
+        //法線バッファの指定
+        GLES20.glVertexAttribPointer( GLES.normalHandle, 3,
+                GLES20.GL_FLOAT, false, 0, buffers.normalBuffer );
+
+        setMaterial( r, g, b, a );
+        GLES20.glLineWidth( 1f );
+        //描画
+        buffers.indexBuffer.position( 0 );
+        GLES20.glDrawElements( GLES20.GL_TRIANGLES,
+                buffers.indexBuffer.capacity(), GLES20.GL_UNSIGNED_BYTE, buffers.indexBuffer );
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
