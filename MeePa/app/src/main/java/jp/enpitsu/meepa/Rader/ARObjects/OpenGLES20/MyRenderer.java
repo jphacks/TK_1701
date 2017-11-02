@@ -41,6 +41,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         // アルファブレンド有効化
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
         GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glEnable(GL10.GL_ALPHA);
 
         //光源色の指定
         GLES20.glUniform4f(GLES.lightAmbientHandle,0.2f,0.2f,0.2f,1.0f);
