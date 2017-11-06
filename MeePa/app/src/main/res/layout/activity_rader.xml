@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fontsample="http://schemas.android.com/apk/res-auto"
+    xmlns:meepa="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackground"
     tools:context=".Rader.RaderActivity">
 
@@ -33,7 +33,7 @@
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/fontSize_Large"
             android:textStyle="bold"
-            fontsample:font="Bauhaus-93_6274.ttf"
+            meepa:font="Bauhaus-93_6274.ttf"
             android:id="@+id/textView_DistanceMessage"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
@@ -47,7 +47,7 @@
             android:textSize="@dimen/fontSize_Regular"
             android:id="@+id/textView_oppName"
             android:layout_gravity="center_horizontal"
-            fontsample:font="KozGoPr6N-Medium.otf"
+            meepa:font="KozGoPr6N-Medium.otf"
             />
 
     </LinearLayout>
