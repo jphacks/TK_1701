@@ -11,11 +11,22 @@ import jp.enpitsu.meepa.Rader.LocationData;
  */
 
 class UserInfo {
+
     public String name,id;
+    public String macAddress;
     public LocationData locationData;
+
     public UserInfo(String name, String id, LocationData loc){
         this.name = name;
         this.id = id;
+        this.macAddress = "";
+        this.locationData = loc;
+    }
+
+    public UserInfo(String name, String id, String macAdr, LocationData loc){
+        this.name = name;
+        this.id = id;
+        this.macAddress = macAdr;
         this.locationData = loc;
     }
 
@@ -24,8 +35,8 @@ class UserInfo {
 public class MeePaApp extends android.app.Application {
     private final String TAG = "MeePaApp";
 
-    private UserInfo self = new UserInfo("","",new LocationData(0,0,0));
-    private UserInfo opponent = new UserInfo("","",new LocationData(0,0,0));
+    private UserInfo self = new UserInfo("","", "", new LocationData(0,0,0));
+    private UserInfo opponent = new UserInfo("","", "", new LocationData(0,0,0));
 
     /* -----------------------------------------------------
 
@@ -58,8 +69,10 @@ public class MeePaApp extends android.app.Application {
         SharedPreferences.Editor editor = data.edit();
         editor.putString("self_name",self.name);
         editor.putString("self_id",self.id);
+        editor.putString("self_macAddress",self.macAddress);
         editor.putString("opp_name",opponent.name);
         editor.putString("opp_id",opponent.id);
+        editor.putString("opp_macAddress",opponent.macAddress);
         editor.apply();
         Log.d(TAG,"data save");
         dump();
@@ -69,8 +82,10 @@ public class MeePaApp extends android.app.Application {
         SharedPreferences data = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         self.name = data.getString("self_name","");
         self.id = data.getString("self_id","");
+        self.macAddress = data.getString("self_macAddress","");
         opponent.name = data.getString("opp_name","");
         opponent.id = data.getString("opp_id","");
+        opponent.macAddress = data.getString("opp_macAddress","");
         Log.d(TAG,"data load");
         dump();
     }
@@ -95,6 +110,13 @@ public class MeePaApp extends android.app.Application {
         self.id = id;
     };
 
+    public void setSelfUserInfo(String name, String id, String macAdr){
+        self.name = name;
+        self.id = id;
+        self.macAddress = macAdr;
+    };
+
+
     public void setSelfLocationData( LocationData locationData ) {
         self.locationData = locationData;
     }
@@ -107,11 +129,19 @@ public class MeePaApp extends android.app.Application {
         return self.id;
     }
 
+    public String getSelfUserMacAddress() { return self.macAddress; }
+
     public LocationData getSelfLocationData() { return self.locationData; }
 
     public void setOpponentUserInfo(String name, String id){
         opponent.name = name;
         opponent.id = id;
+    };
+
+    public void setOpponentUserInfo(String name, String id, String macAdr){
+        opponent.name = name;
+        opponent.id = id;
+        opponent.macAddress = macAdr;
     };
 
     public void setOpponentLocationData( LocationData locationData ) {
@@ -125,6 +155,8 @@ public class MeePaApp extends android.app.Application {
     public String getOpponentUserId(){
         return opponent.id;
     }
+
+    public String getOpponentUserMacAddress() { return opponent.macAddress; }
 
     public LocationData getOpponentLocationData() { return opponent.locationData; }
 

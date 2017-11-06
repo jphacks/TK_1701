@@ -1,102 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:meepa="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground">
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/menu_bg2"
-        android:scaleType="fitXY"/>
-    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_weight="9.8"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginRight="@dimen/horizontal_margin"
+            android:orientation="vertical"
+            android:paddingBottom="25dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
+
+
+            <jp.enpitsu.meepa.Global.CustomTextView
+                android:id="@+id/textView_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="MeePa"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/fontSize_Large"
+                meepa:font="Bauhaus-93_6274.ttf"/>
+
+            <jp.enpitsu.meepa.Global.CustomEditText
+                android:id="@+id/editText_oppId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="11dp"
+                android:gravity="center"
+                android:background="@color/colorWhite"
+                android:singleLine="true"
+                android:hint="PIN"
+                android:textSize="@dimen/fontSize_Regular"
+                android:textColor="@color/colorGray"
+                />
+
+            <jp.enpitsu.meepa.Global.CustomButton
+                android:id="@+id/button_meetUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorGray"
+                android:text="Meep Up"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/fontSize_Regular" />
+
+        </LinearLayout>
+    </RelativeLayout>
+    <jp.enpitsu.meepa.Global.CustomButton
+        android:id="@+id/button_createNewPIN"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingTop="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="25dp">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorOrange"
+        android:gravity="center"
+        android:text="Create New PIN"
+        android:textColor="@color/colorWhite"
+        android:layout_weight="0.2"
+        android:textSize="@dimen/fontSize_Regular"
+        />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:id="@+id/button" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#96ffffff"
-                android:text="集GO!"
-                android:id="@+id/first_msg"
-                android:textSize="50dp"
-                android:gravity="bottom"
-                android:paddingTop="15dp"
-                android:paddingBottom="5dp"
-                android:layout_weight="0.1"/>
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="5">
-
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton_regist"
-                android:background="@drawable/button_getid"
-                android:scaleType="fitXY"
-                android:paddingBottom="10dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text=" Get ID"
-                android:id="@+id/text_getid"
-                android:textSize="40dp"
-                android:gravity="left|bottom"
-                android:paddingBottom="5dp" />
-        </FrameLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:layout_margin="10dp" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="5">
-
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton_search"
-                android:background="@drawable/button_lets_syugo"
-                android:layout_gravity="center"
-                android:scaleType="fitXY"
-                android:paddingBottom="10dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp"
-                android:layout_weight="0.8"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text=" Let's 集GO!"
-                android:id="@+id/text_lets"
-                android:textSize="40dp"
-                android:gravity="left|bottom"
-                android:paddingBottom="5dp" />
-        </FrameLayout>
-
-    </LinearLayout>
-</FrameLayout>
+</LinearLayout>
 

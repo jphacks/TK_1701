@@ -62,17 +62,17 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="meepa" android:host="shareID" />
+            </intent-filter>
         </activity>
         <activity android:name=".Rader.RaderActivity"
                     android:screenOrientation="portrait"/>
         <activity android:name=".Lookfor.LookActivity"
                     android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="syugo" android:host="shareID" />
-            </intent-filter>
         </activity>
         <activity android:name=".Registor.RegActivity"
                     android:screenOrientation="portrait"/>
