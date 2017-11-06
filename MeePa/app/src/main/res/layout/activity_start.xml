@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fontsample="http://schemas.android.com/apk/res-auto"
+    xmlns:meepa="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackground">
 
     <RelativeLayout
@@ -38,7 +38,7 @@
                 android:text="MeePa"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/fontSize_Large"
-                fontsample:font="Bauhaus-93_6274.ttf"/>
+                meepa:font="Bauhaus-93_6274.ttf"/>
 
             <jp.enpitsu.meepa.Global.CustomEditText
                 android:id="@+id/editText_oppId"
