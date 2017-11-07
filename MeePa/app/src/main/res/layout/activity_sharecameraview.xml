@@ -1,36 +1,13 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
-    tools:context="jp.enpitsu.meepa.ShareCameraView.ShareCameraViewActivity">
+    xmlns:meepa="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    tools:context=".Rader.RaderActivity">
 
-
-    <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/tvOwnId"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="textview"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
-
-    <Button
-        android:text="Make Call"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:id="@+id/btnAction" />
-
+    <!--重ねるViewを、下のもの（カメラ）から順に記述-->
     <view
         android:layout_width="320dp"
         android:layout_height="320dp"
@@ -40,27 +17,280 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:id="@+id/svRemoteView"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        />
 
-    <view
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        class="io.skyway.Peer.Browser.Canvas"
-        android:id="@+id/svLocalView"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="16dp" />
+    <!--カメラプレビュー-->
+    <TextureView
+        android:id="@+id/texture_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <Button
-        android:text="Switch Camera"
+    <!--位置情報のメッセージ-->
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/switchCameraAction"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp" />
+        android:layout_gravity="right"
+        android:layout_margin="20dp"
+        >
+        <jp.enpitsu.meepa.Global.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:text="AR"
+            android:textSize="15dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            />
+        <Switch
+            android:id="@+id/switch_AR_"
+            style="@style/raderSwitch"
+            android:layout_width="match_parent"
+            android:text=""
+            android:checked="false"
+            />
+    </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:id="@+id/linearLayout_raderMessages">
+
+        <jp.enpitsu.meepa.Global.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="measuring"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/fontSize_Large"
+            android:textStyle="bold"
+            meepa:font="Bauhaus-93_6274.ttf"
+            android:id="@+id/textView_DistanceMessage"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            />
+        <jp.enpitsu.meepa.Global.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/fontSize_Regular"
+            android:id="@+id/textView_oppName"
+            android:layout_gravity="center_horizontal"
+            meepa:font="KozGoPr6N-Medium.otf"
+            />
+
+    </LinearLayout>
+
+
+    <!--下側のボタン群+wifiDirectのメッセージ表示テキスト -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/textView_WifiDirectMessage"
+            android:text="WifiDirect OFF時に\nこのテキストエリアをタップすることで非表示にできます。\n"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/colorButtonPressedBackground"
+            android:visibility="gone"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:maxLines="15"
+            />
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:id="@+id/linearLayout_bottomButtons"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="55dp"
+            >
+
+            <ToggleButton
+                style="@style/raderToggleButton"
+                android:id="@+id/button_Vibe_"
+                android:background="@drawable/custom_rader_button_state_vibe"
+                android:layout_margin="18dp"
+                android:layout_height="50dp"
+                android:checked="true"
+                />
+
+            <ToggleButton
+                style="@style/raderToggleButton"
+                android:id="@+id/button_share_"
+                android:background="@drawable/custom_rader_button_state_share"
+                android:checked="false"
+                />
+
+            <ToggleButton
+                style="@style/raderToggleButton"
+                android:id="@+id/button_wifiDirect_"
+                android:background="@drawable/custom_rader_button_state_wifi"
+                android:textColor="@color/colorWhite"
+                android:layout_margin="18dp"
+                android:layout_height="50dp"
+                android:checked="false"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <!--デバッグ用情報表示-->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="NO DATA"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/textView_info"
+            android:layout_gravity="right|bottom"
+            android:background="@color/colorButtonPressedBackground"
+            android:visibility="gone" />
+
+        <Button
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:text="i"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/button_info_"
+            android:layout_gravity="right|bottom"
+            android:background="@drawable/custom_button_state"
+            />
+    </LinearLayout>
+
+
+    <!--ARモード時のメッセージ等-->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTransparentBlack"
+        android:id="@+id/linearLayout_ARMassages"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:visibility="gone">
+        <jp.enpitsu.meepa.Global.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="reqName"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/textView_reqNameAR"
+            android:shadowColor="#de000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="2.0"
+            />
+
+        <jp.enpitsu.meepa.Global.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Distance"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/textView_distanceAR"
+            android:shadowColor="#de000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="2.0"
+            />
+    </LinearLayout>
+    
+
+</FrameLayout>
+
+
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="#0099cc"-->
+    <!--tools:context="jp.enpitsu.meepa.ShareCameraView.ShareCameraViewActivity">-->
+
+
+    <!--<TextView-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:id="@+id/tvOwnId"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:text="textview"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="18sp" />-->
+
+    <!--<Button-->
+        <!--android:text="Make Call"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:id="@+id/btnAction" />-->
+
+    <!--<view-->
+        <!--android:layout_width="320dp"-->
+        <!--android:layout_height="320dp"-->
+        <!--class="io.skyway.Peer.Browser.Canvas"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:id="@+id/svRemoteView"-->
+        <!--android:layout_marginTop="8dp" />-->
+
+    <!--<view-->
+        <!--android:layout_width="140dp"-->
+        <!--android:layout_height="140dp"-->
+        <!--class="io.skyway.Peer.Browser.Canvas"-->
+        <!--android:id="@+id/svLocalView"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:layout_marginBottom="16dp" />-->
+
+    <!--<Button-->
+        <!--android:text="Switch Camera"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/switchCameraAction"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginLeft="16dp" />-->
+
+<!--</LinearLayout>-->

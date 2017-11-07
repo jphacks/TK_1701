@@ -2,6 +2,8 @@ package jp.enpitsu.meepa.ShareCameraView;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -15,8 +17,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.json.JSONArray;
 
@@ -45,6 +50,11 @@ public class ShareCameraViewActivity extends Activity {
     private String myID, oppID;
     private String myName, oppName; // 相手ユーザ名
 
+    private ToggleButton button_Vibration, button_WifiDirect, button_ShareCamera;
+    private Switch switch_AR;
+    private Button button_info;
+
+    private Dialog progressDialog;
 
     private MeePaApp meepaApp; // グローバルクラス
 
@@ -81,13 +91,38 @@ public class ShareCameraViewActivity extends Activity {
         oppID = meepaApp.getOpponentUserId();
         oppName = meepaApp.getOpponentUserName();
 
-
         //
         // Windows title hidden
         //
         Window wnd = getWindow();
         wnd.addFlags(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_sharecameraview);
+
+        //////////////////////////////////////////////////////////////////////////
+        // レイアウト(xml)との結びつけ
+        button_ShareCamera= (ToggleButton)findViewById( R.id.button_share_ );
+        button_Vibration  = (ToggleButton)findViewById( R.id.button_Vibe_ );
+        button_WifiDirect = (ToggleButton)findViewById( R.id.button_wifiDirect_ );
+        switch_AR          = (Switch)findViewById( R.id.switch_AR_ );
+        button_info        = (Button)findViewById( R.id.button_info_ );
+
+
+        // リスナのセット
+        button_ShareCamera.setOnClickListener(onClick_RaderButtonsListener);
+        button_Vibration.setOnClickListener(onClick_RaderButtonsListener);
+        button_WifiDirect.setOnClickListener(onClick_RaderButtonsListener);
+        switch_AR.setOnClickListener(onClick_RaderButtonsListener);
+        button_info.setOnClickListener(onClick_RaderButtonsListener);
+
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(true);
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.custom_progressdialog);
+
+
+        //////////////////////////////////////////////////////////////////////////////
 
         //
         // Set UI handler
@@ -124,8 +159,18 @@ public class ShareCameraViewActivity extends Activity {
                 // PeerIDが発行されたらそれを表示
                 // Show my ID
                 _strOwnId = (String) object;
-                TextView tvOwnId = (TextView) findViewById( R.id.tvOwnId );
-                tvOwnId.setText(myName + " ( ID : " + _strOwnId + " )");
+
+                /////////////////////////////////////////////////////////////////////////////////////
+                // 接続を試みる
+                if (!_bConnected) { // どこにも接続してないとき
+
+                    // Select remote peer & make a call
+                    showPeerIDs(); // 発信先のPeerIDを取得
+                    //showPeerIDsメソッドでは、listAllPeersメソッドを利用して、接続先のPeerID一覧を取得
+                }
+                /////////////////////////////////////////////////////////////////////////////////////
+//                TextView tvOwnId = (TextView) findViewById( R.id.tvOwnId );
+//                tvOwnId.setText(myName + " ( ID : " + _strOwnId + " )");
 
             }
         });
@@ -192,7 +237,10 @@ public class ShareCameraViewActivity extends Activity {
                 // 引数に相手に送信する映像・音声（自分のストリーム）
 
                 _bConnected = true;
-                updateActionButtonTitle();
+                // TODO : ここでロード終了 //////////////////////////////////////////////////
+                progressDialog.dismiss();
+
+//                updateActionButtonTitle();
             }
         });
 
@@ -202,52 +250,54 @@ public class ShareCameraViewActivity extends Activity {
         //
 
         // Set GUI event listner for Button (make/hang up a call)
-        Button btnAction = (Button) findViewById(R.id.btnAction);
-        btnAction.setEnabled(true);
-        btnAction.setOnClickListener(new View.OnClickListener()	{
-            @Override
-            public void onClick(View v)	{
-                v.setEnabled(false);
-
-                if (!_bConnected) { // どこにも接続してないとき
-
-                    // Select remote peer & make a call
-                    showPeerIDs(); // 発信先のPeerIDを取得
-                    //showPeerIDsメソッドでは、listAllPeersメソッドを利用して、接続先のPeerID一覧を取得
-                }
-                else { // 接続中のときは
-
-                    // MediaConnectionオブジェクトのCloseメソッドで該当するMediaConnectionを切断
-                    // Hang up a call
-                    closeRemoteStream();
-                    _mediaConnection.close();
-
-                }
-
-                v.setEnabled(true);
-            }
-        });
+//        Button btnAction = (Button) findViewById(R.id.btnAction);
+//        btnAction.setEnabled(true);
+//        btnAction.setOnClickListener(new View.OnClickListener()	{
+//            @Override
+//            public void onClick(View v)	{
+//                v.setEnabled(false);
+//
+//                if (!_bConnected) { // どこにも接続してないとき
+//
+//                    // Select remote peer & make a call
+//                    showPeerIDs(); // 発信先のPeerIDを取得
+//                    //showPeerIDsメソッドでは、listAllPeersメソッドを利用して、接続先のPeerID一覧を取得
+//                }
+//                else { // 接続中のときは
+//
+//                    // MediaConnectionオブジェクトのCloseメソッドで該当するMediaConnectionを切断
+//                    // Hang up a call
+//                    closeRemoteStream();
+//                    _mediaConnection.close();
+//
+//                }
+//
+//                v.setEnabled(true);
+//            }
+//        });
 
 
         // Action for switchCameraButton
-        Button switchCameraAction = (Button)findViewById(R.id.switchCameraAction);
-        switchCameraAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)	{
-                if(null != _localStream){
-                    Boolean result = _localStream.switchCamera(); // カメラの切り替え
-                    if(true == result)	{
-                        //Success
-                    }
-                    else {
-                        //Failed
-                    }
-                }
+//        Button switchCameraAction = (Button)findViewById(R.id.switchCameraAction);
+//        switchCameraAction.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v)	{
+//                if(null != _localStream){
+//                    Boolean result = _localStream.switchCamera(); // カメラの切り替え
+//                    if(true == result)	{
+//                        //Success
+//                    }
+//                    else {
+//                        //Failed
+//                    }
+//                }
+//
+//            }
+//        });
 
-            }
-        });
 
     }
+
 
     //
     // onRequestPermissionResult
@@ -312,7 +362,11 @@ public class ShareCameraViewActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        destroyPeer();
+        try {
+            destroyPeer();
+        } catch (Exception e) {
+            Log.d(TAG, e.toString());
+        }
         super.onDestroy();
     }
 
@@ -334,14 +388,14 @@ public class ShareCameraViewActivity extends Activity {
         // 前面（FRONT），背面（BACK）どちらのカメラを使うか
         constraints.cameraPosition = MediaConstraints.CameraPositionEnum.BACK;
 
-        // 取得と再生
-        Navigator.initialize(_peer);								// Navigatorクラスの初期化
-        _localStream = Navigator.getUserMedia(constraints);		// getUserMediaメソッドの引数にconstraintsを指定
-        // 自分のカメラ映像（ローカルストリーム）が取得可能
-
-        Canvas canvas = (Canvas) findViewById(R.id.svLocalView);	// 映像表示用のcanvas
-        // 取得したMediaStreamオブジェクトにビデオレンダラー(表示用のCanvasオブジェクト)を割り当て
-        _localStream.addVideoRenderer(canvas,0);
+//        // 取得と再生
+//        Navigator.initialize(_peer);								// Navigatorクラスの初期化
+//        _localStream = Navigator.getUserMedia(constraints);		// getUserMediaメソッドの引数にconstraintsを指定
+//        // 自分のカメラ映像（ローカルストリーム）が取得可能
+//
+//        Canvas canvas = (Canvas) findViewById(R.id.svLocalView);	// 映像表示用のcanvas
+//        // 取得したMediaStreamオブジェクトにビデオレンダラー(表示用のCanvasオブジェクト)を割り当て
+//        _localStream.addVideoRenderer(canvas,0);
 
     }
 
@@ -368,7 +422,8 @@ public class ShareCameraViewActivity extends Activity {
             public void onCallback(Object object) {
                 closeRemoteStream();
                 _bConnected = false;
-                updateActionButtonTitle();
+                finish();
+//                updateActionButtonTitle();
             }
         });
 
@@ -399,8 +454,8 @@ public class ShareCameraViewActivity extends Activity {
         closeRemoteStream();
 
         if (null != _localStream) {
-            Canvas canvas = (Canvas) findViewById(R.id.svLocalView);
-            _localStream.removeVideoRenderer(canvas,0);
+//            Canvas canvas = (Canvas) findViewById(R.id.svLocalView);
+//            _localStream.removeVideoRenderer(canvas,0);
             _localStream.close();
         }
 
@@ -495,7 +550,7 @@ public class ShareCameraViewActivity extends Activity {
             _bConnected = true;
         }
 
-        updateActionButtonTitle();
+//        updateActionButtonTitle();
     }
 
 
@@ -506,6 +561,7 @@ public class ShareCameraViewActivity extends Activity {
     void showPeerIDs() {
         if ((null == _peer) || (null == _strOwnId) || (0 == _strOwnId.length())) {
             Toast.makeText(this, "Your PeerID is null or invalid.", Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
 
@@ -550,6 +606,7 @@ public class ShareCameraViewActivity extends Activity {
                 }
                 else{
                     Toast.makeText(fContext, "PeerID list (other than your ID) is empty.", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         });
@@ -559,22 +616,35 @@ public class ShareCameraViewActivity extends Activity {
     //
     // Update actionButton title
     //
-    void updateActionButtonTitle() {
-        _handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Button btnAction = (Button) findViewById(R.id.btnAction);
-                if (null != btnAction) {
-                    if (false == _bConnected) {
-                        btnAction.setText("Make Call");
-                    } else {
-                        btnAction.setText("Hang up");
-                    }
-                }
+//    void updateActionButtonTitle() {
+//        _handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                Button btnAction = (Button) findViewById(R.id.btnAction);
+//                if (null != btnAction) {
+//                    if (false == _bConnected) {
+//                        btnAction.setText("Make Call");
+//                    } else {
+//                        btnAction.setText("Hang up");
+//                    }
+//                }
+//            }
+//        });
+//    }
+
+
+    // レーダー画面のボタンが押された場合，レーダー画面に戻る（このアクティビティを殺す）
+    private View.OnClickListener onClick_RaderButtonsListener =new View.OnClickListener() {
+        public void onClick(View v) {
+            // 切断処理
+            try {
+                destroyPeer();
+            } catch ( Exception e ) {
+                Log.d( TAG, e.toString() );
             }
-        });
-    }
 
-
+            finish();
+        }
+    };
 
 }
