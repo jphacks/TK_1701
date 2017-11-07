@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -54,8 +55,8 @@ public class RaderActivity extends Activity {
 
     private PermissionManager permissionManager;
 
-    ToggleButton button_AR, button_Vibration, button_WifiDirect;
-    ImageView backgroundImageView;
+    ToggleButton button_Vibration, button_WifiDirect, button_ShareCamera;
+    Switch switch_AR;
     TextureView textureView;
 
     LinearLayout linearLayout_raderMessages;
@@ -138,9 +139,10 @@ public class RaderActivity extends Activity {
 
 
         // レイアウト(xml)との結びつけ
-        button_AR          = (ToggleButton)findViewById( R.id.button_AR );
+        button_ShareCamera= (ToggleButton)findViewById( R.id.button_share );
         button_Vibration  = (ToggleButton)findViewById( R.id.button_Vibe );
         button_WifiDirect = (ToggleButton)findViewById( R.id.button_wifiDirect );
+        switch_AR          = (Switch)findViewById( R.id.switch_AR );
 
         linearLayout_raderMessages = (LinearLayout)findViewById( R.id.linearLayout_raderMessages );
         textView_DistanceMessage = (TextView)findViewById( R.id.textView_DistanceMessage );
@@ -157,14 +159,13 @@ public class RaderActivity extends Activity {
         button_info = (Button)findViewById( R.id.button_info );
         textView_info = (TextView)findViewById( R.id.textView_info );
 
-        // フォント設定
-//        button_AR.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-//        button_WifiDirect.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-//        button_Vibration.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-//        textView_DistanceMessage.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-//        textView_AccuracyMessage.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-//        textView_reqNameAR.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
-//        textView_distanceAR.setTypeface( Typeface.createFromAsset( getAssets(), "fonts/FLOPDesignFont.ttf"), Typeface.NORMAL );
+
+        // リスナのセット
+        button_ShareCamera.setOnClickListener(onClick_ButtonShareCameraListener);
+        button_Vibration.setOnClickListener(onClick_ButtonVibrationListener);
+        switch_AR.setOnClickListener(onClick_SwitchARListener);
+        button_info.setOnClickListener(onClick_ButtonInfoListener);
+
 
 
         textView_WifiDirectMessage = (TextView)findViewById( R.id.textView_WifiDirectMessage );
@@ -468,20 +469,20 @@ public class RaderActivity extends Activity {
     protected void onRestart() {
         super.onRestart();
 
-        if ( button_AR.isChecked() == true ) {
+        if ( switch_AR.isChecked() == true ) {
             // ARを強制終了
             RADER_VALUES.switchARMode( false );
             // カメラ開放
             mCamera.close();
             mCamera = null;
             // 背景差し替え(imageView表示)
-            backgroundImageView.setVisibility( backgroundImageView.VISIBLE );
+//            backgroundImageView.setVisibility( backgroundImageView.VISIBLE );
             // AR用メッセージ非表示
             linearLayout_ARMessages.setVisibility( View.GONE );
             // レーダー用メッセージ表示
             linearLayout_raderMessages.setVisibility( View.VISIBLE );
 
-            button_AR.setChecked( false );
+            switch_AR.setChecked( false );
 
             // Toast表示
             Toast toast = Toast.makeText( getApplicationContext(),
@@ -606,36 +607,43 @@ public class RaderActivity extends Activity {
         permissionManager.onRequestPermissionsResult( requestCode, permissions, grantResults );
     }
 
-    // ARモードのon/off切り替えボタンがクリックされたとき
-    public void onARSwitchButtonClicked(View v) {
-        if( button_AR.isChecked() == true ) { // OFF → ONのとき
 
-            // パーミッションを持っているか確認する
-            if (PermissionChecker.checkSelfPermission(
-                    RaderActivity.this, Manifest.permission.CAMERA)
-                    != PackageManager.PERMISSION_GRANTED) {
-                // パーミッションをリクエストする
-                permissionManager.requestCameraPermission();
-                return;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // ボタン等押下時の処理とそれに係る諸処理 //////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // ARモードのon/off切り替えスイッチがクリックされたとき
+    private View.OnClickListener onClick_SwitchARListener =new View.OnClickListener() {
+        public void onClick(View v) {
+            if( switch_AR.isChecked() == true ) { // OFF → ONのとき
+
+                // パーミッションを持っているか確認する
+                if (PermissionChecker.checkSelfPermission(
+                        RaderActivity.this, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // パーミッションをリクエストする
+                    permissionManager.requestCameraPermission();
+                    return;
+                }
+                Log.d( "REQUEST PERMISSION", "パーミッション取得済み" );
+                // ARモード開始
+                startARMode();
             }
-            Log.d( "REQUEST PERMISSION", "パーミッション取得済み" );
-            // ARモード開始
-            startARMode();
+            else { // ON → OFFのとき
+                // ARモード終了
+                RADER_VALUES.switchARMode( false );
+                // カメラ開放
+                mCamera.close();
+                mCamera = null;
+                // 背景差し替え(カメラプレビュー非表示)
+                textureView.setVisibility( View.INVISIBLE );
+                // AR用メッセージ非表示
+                linearLayout_ARMessages.setVisibility( View.GONE );
+                // レーダー用メッセージ表示
+                linearLayout_raderMessages.setVisibility( View.VISIBLE );
+            }
         }
-        else { // ON → OFFのとき
-            // ARモード終了
-            RADER_VALUES.switchARMode( false );
-            // カメラ開放
-            mCamera.close();
-            mCamera = null;
-            // 背景差し替え(imageView表示)
-            backgroundImageView.setVisibility( backgroundImageView.VISIBLE );
-            // AR用メッセージ非表示
-            linearLayout_ARMessages.setVisibility( View.GONE );
-            // レーダー用メッセージ表示
-            linearLayout_raderMessages.setVisibility( View.VISIBLE );
-        }
-    }
+    };
 
     public void startARMode() {
         RADER_VALUES.switchARMode( true );
@@ -643,29 +651,107 @@ public class RaderActivity extends Activity {
         if ( textureView.isAvailable() == true ) {
             mCamera = new Camera2(textureView, this);
             mCamera.open();
+
+
+            // 背景差し替え（TextureView表示）
+            textureView.setVisibility( View.VISIBLE );
+            // AR用メッセージ表示
+            linearLayout_ARMessages.setVisibility( View.VISIBLE );
+            // レーダー用メッセージ非表示
+            linearLayout_raderMessages.setVisibility( View.GONE );
         }
-
-        // 背景差し替え（imageView非表示）
-        backgroundImageView.setVisibility( backgroundImageView.INVISIBLE );
-        // AR用メッセージ表示
-        linearLayout_ARMessages.setVisibility( View.VISIBLE );
-        // レーダー用メッセージ非表示
-        linearLayout_raderMessages.setVisibility( View.GONE );
-
     }
+
 
 
     // [振動止める/つける]ボタン押下
-    public void onVibeSwitchClicked( View v ) {
-        if( button_Vibration.isChecked() == true ) { // OFF → ONのとき
-            flag_vibrator = true;
+    private View.OnClickListener onClick_ButtonVibrationListener =new View.OnClickListener() {
+        public void onClick(View v) {
+            if( button_Vibration.isChecked() == true ) { // OFF → ONのとき
+                flag_vibrator = true;
+            }
+            else { // ON → OFFのとき
+                flag_vibrator = false;
+                // 現在動作中の振動も止める
+                vibrator.cancel();
+            }
         }
-        else { // ON → OFFのとき
-            flag_vibrator = false;
-            // 現在動作中の振動も止める
-            vibrator.cancel();
+    };
+
+
+    // WebRTCでカメラ映像シェアなボタン押下
+    private View.OnClickListener onClick_ButtonShareCameraListener =new View.OnClickListener() {
+        public void onClick(View v) {
+
+            // SkyWay（WebRTC）のアクティビティ
+            Intent intent_find = new Intent(RaderActivity.this, ShareCameraViewActivity.class);
+            startActivity(intent_find);
+
         }
-    }
+    };
+
+
+    // デバッグ用情報を表示するTextviewの表示、非表示切り替え
+    private View.OnClickListener onClick_ButtonInfoListener =new View.OnClickListener() {
+        public void onClick(View v) {
+
+            if( isInfoVisible == false ) {
+                textView_info.setVisibility(View.VISIBLE);
+                isInfoVisible = true;
+            } else {
+                textView_info.setVisibility(View.GONE);
+                isInfoVisible = false;
+            }
+
+        }
+    };
+
+//    // [振動止める/つける]ボタン押下
+//    public void onVibeSwitchClicked( View v ) {
+//        if( button_Vibration.isChecked() == true ) { // OFF → ONのとき
+//            flag_vibrator = true;
+//        }
+//        else { // ON → OFFのとき
+//            flag_vibrator = false;
+//            // 現在動作中の振動も止める
+//            vibrator.cancel();
+//        }
+//    }
+
+//    public void onARSwitchButtonClicked(View v) {
+//        if( switch_AR.isChecked() == true ) { // OFF → ONのとき
+//
+//            // パーミッションを持っているか確認する
+//            if (PermissionChecker.checkSelfPermission(
+//                    RaderActivity.this, Manifest.permission.CAMERA)
+//                    != PackageManager.PERMISSION_GRANTED) {
+//                // パーミッションをリクエストする
+//                permissionManager.requestCameraPermission();
+//                return;
+//            }
+//            Log.d( "REQUEST PERMISSION", "パーミッション取得済み" );
+//            // ARモード開始
+//            startARMode();
+//        }
+//        else { // ON → OFFのとき
+//            // ARモード終了
+//            RADER_VALUES.switchARMode( false );
+//            // カメラ開放
+//            mCamera.close();
+//            mCamera = null;
+//            // 背景差し替え(imageView表示)
+////            backgroundImageView.setVisibility( backgroundImageView.VISIBLE );
+//            // AR用メッセージ非表示
+//            linearLayout_ARMessages.setVisibility( View.GONE );
+//            // レーダー用メッセージ表示
+//            linearLayout_raderMessages.setVisibility( View.VISIBLE );
+//        }
+//    }
+
+
+
+
+
 
     // 距離を受け取って、距離に応じて振動させるメソッド
     private void viberation( double distance ) {
@@ -703,26 +789,4 @@ public class RaderActivity extends Activity {
         }
     }
 
-
-    // デバッグ用情報を表示するTextviewの表示、非表示切り替え
-    public void onClickButtonInfo( View view ) {
-        if( isInfoVisible == false ) {
-            textView_info.setVisibility(View.VISIBLE);
-            isInfoVisible = true;
-        } else {
-            textView_info.setVisibility(View.GONE);
-            isInfoVisible = false;
-        }
-    }
-
-
-    // デバッグ用
-    // ShareCameraView
-    public void onClickDistanceText( View view ) {
-
-        // SkyWay（WebRTC）のアクティビティ
-        Intent intent_find = new Intent(RaderActivity.this, ShareCameraViewActivity.class);
-        startActivity(intent_find);
-
-    }
 }

@@ -38,7 +38,9 @@
             android:id="@+id/switch_AR"
             style="@style/raderSwitch"
             android:layout_width="match_parent"
-            android:text="" />
+            android:text=""
+            android:checked="false"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -59,7 +61,6 @@
             android:id="@+id/textView_DistanceMessage"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:onClick="onClickDistanceText"
             />
         <jp.enpitsu.meepa.Global.CustomTextView
             android:layout_width="wrap_content"
@@ -117,18 +118,17 @@
 
             <ToggleButton
                 style="@style/raderToggleButton"
-                android:id="@+id/button_AR"
+                android:id="@+id/button_Vibe"
                 android:background="@drawable/custom_rader_button_state_vibe"
-                android:onClick="onARSwitchButtonClicked"
                 android:layout_margin="18dp"
                 android:layout_height="50dp"
+                android:checked="true"
                 />
 
             <ToggleButton
                 style="@style/raderToggleButton"
-                android:id="@+id/button_Vibe"
+                android:id="@+id/button_share"
                 android:background="@drawable/custom_rader_button_state_share"
-                android:onClick="onVibeSwitchClicked"
                 android:checked="false"
                 />
 
@@ -139,6 +139,7 @@
                 android:textColor="@color/colorWhite"
                 android:layout_margin="18dp"
                 android:layout_height="50dp"
+                android:checked="false"
                 />
         </LinearLayout>
         <!--<LinearLayout-->
@@ -267,7 +268,7 @@
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:visibility="gone">
-        <TextView
+        <jp.enpitsu.meepa.Global.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -280,7 +281,7 @@
             android:shadowRadius="2.0"
             />
 
-        <TextView
+        <jp.enpitsu.meepa.Global.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Distance"

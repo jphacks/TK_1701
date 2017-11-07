@@ -126,7 +126,7 @@ public class PermissionManager extends RaderActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // 許可されなかった場合
                                 // ARモード終了
-                                raderActivity.button_AR.setChecked( false );
+                                raderActivity.switch_AR.setChecked( false );
                             }
                         })
                         .create()
@@ -146,7 +146,7 @@ public class PermissionManager extends RaderActivity {
                         .create()
                         .show();
                 // 許可されなかった場合②
-                raderActivity.button_AR.setChecked( false );
+                raderActivity.switch_AR.setChecked( false );
             }
         } else {
             Log.d("REQUEST PERMISSION", "onRequestPermissionsResult:GRANTED");
