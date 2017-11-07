@@ -15,4 +15,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="raderToggleButton">
+        <item name="android:layout_height">78dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textOn"></item>
+        <item name="android:textOff"></item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>
