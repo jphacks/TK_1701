@@ -54,7 +54,7 @@ public class ShareCameraViewActivity extends Activity {
     private Switch switch_AR;
     private Button button_info;
 
-    private Dialog progressDialog;
+    private LoadingView loadingView;
 
     private MeePaApp meepaApp; // グローバルクラス
 
@@ -115,12 +115,8 @@ public class ShareCameraViewActivity extends Activity {
         button_info.setOnClickListener(onClick_RaderButtonsListener);
 
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(true);
-        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.custom_progressdialog);
-
+        loadingView = new LoadingView( this );
+        loadingView.show();
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -238,7 +234,7 @@ public class ShareCameraViewActivity extends Activity {
 
                 _bConnected = true;
                 // TODO : ここでロード終了 //////////////////////////////////////////////////
-                progressDialog.dismiss();
+                loadingView.close();
 
 //                updateActionButtonTitle();
             }

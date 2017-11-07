@@ -14,5 +14,6 @@
     <color name="colorLightBackground">#f653a8</color>
 
     <color name="colorTransparentBlack">#46000000</color>
+    <color name="colorTransparentWhite">#46FFFFFF</color>
     <color name="colorTransparent">#00000000</color>
 </resources>

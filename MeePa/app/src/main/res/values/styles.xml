@@ -39,4 +39,9 @@
         <item name="android:layout_gravity">right|top</item>
         <item name="android:textSize">20dp</item>
     </style>
+
+    <style name="TransparentDialogTheme" parent="@android:style/Theme.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>
