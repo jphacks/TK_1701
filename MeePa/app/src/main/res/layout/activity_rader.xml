@@ -10,6 +10,7 @@
     <!--重ねるViewを、下のもの（カメラ）から順に記述-->
 
     <!--カメラプレビュー-->
+
     <TextureView
         android:id="@+id/texture_view"
         android:layout_width="match_parent"
@@ -17,8 +18,29 @@
 
     <!--位置情報のメッセージ-->
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_margin="20dp"
+        >
+        <jp.enpitsu.meepa.Global.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:text="AR"
+            android:textSize="15dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            />
+        <Switch
+            android:id="@+id/switch_AR"
+            style="@style/raderSwitch"
+            android:layout_width="match_parent"
+            android:text="" />
+    </LinearLayout>
 
-    <!--ARでないときの背景-->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -86,11 +108,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:id="@+id/linearLayout_bottomButtons"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="55dp"
             >
 
             <ToggleButton
@@ -98,7 +120,8 @@
                 android:id="@+id/button_AR"
                 android:background="@drawable/custom_rader_button_state_vibe"
                 android:onClick="onARSwitchButtonClicked"
-                android:checked="true"
+                android:layout_margin="18dp"
+                android:layout_height="50dp"
                 />
 
             <ToggleButton
@@ -114,6 +137,8 @@
                 android:id="@+id/button_wifiDirect"
                 android:background="@drawable/custom_rader_button_state_wifi"
                 android:textColor="@color/colorWhite"
+                android:layout_margin="18dp"
+                android:layout_height="50dp"
                 />
         </LinearLayout>
         <!--<LinearLayout-->
