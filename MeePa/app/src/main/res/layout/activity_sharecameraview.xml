@@ -72,6 +72,7 @@
             android:id="@+id/textView_DistanceMessage"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
+
             />
         <jp.enpitsu.meepa.Global.CustomTextView
             android:layout_width="wrap_content"

@@ -10,6 +10,12 @@
     <!--重ねるViewを、下のもの（カメラ）から順に記述-->
 
     <!--カメラプレビュー-->
+    <fragment
+        android:name="jp.enpitsu.meepa.Rader.ShareCamera.ShareCameraViewFragment"
+        android:id="@+id/fragment_shareCameraView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
     <TextureView
         android:id="@+id/texture_view"

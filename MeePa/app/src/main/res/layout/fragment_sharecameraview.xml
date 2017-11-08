@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorTransparent"
+    tools:context="jp.enpitsu.meepa.ShareCameraView.ShareCameraViewActivity">
+
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="io.skyway.Peer.Browser.Canvas"
+        android:id="@+id/svRemoteView"
+        />
+
+    <view
+        android:id="@+id/svLocalView"
+        class="io.skyway.Peer.Browser.Canvas"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_gravity="bottom|right"
+        />
+
+</FrameLayout>

@@ -2,6 +2,8 @@ package jp.enpitsu.meepa.Rader;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,6 +23,7 @@ import android.support.v4.content.PermissionChecker;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +43,7 @@ import jp.enpitsu.meepa.Lookfor.LookActivity;
 import jp.enpitsu.meepa.Rader.ARObjects.OpenGLES20.MyGLSurfaceView;
 import jp.enpitsu.meepa.R;
 import jp.enpitsu.meepa.Rader.ARObjects.OpenGLES20.RADER_VALUES;
+import jp.enpitsu.meepa.Rader.ShareCamera.ShareCameraViewFragment;
 import jp.enpitsu.meepa.ShareCameraView.ShareCameraViewActivity;
 import jp.enpitsu.meepa.WiFiDirect.WiFiDirect;
 import jp.enpitsu.meepa.Registor.RegActivity;
@@ -54,6 +58,8 @@ public class RaderActivity extends Activity {
     private MyGLSurfaceView glView;
 
     private PermissionManager permissionManager;
+
+    private ShareCameraViewFragment shareCamFragment;
 
     ToggleButton button_Vibration, button_WifiDirect, button_ShareCamera;
     Switch switch_AR;
@@ -97,7 +103,7 @@ public class RaderActivity extends Activity {
     private boolean flag_vibrator = true; // 振動させるかさせないか
 
     String myID, oppID;
-    String oppName; // 相手ユーザ名
+    String myName, oppName; // 相手ユーザ名
 
     private LocationData myLocationData;  // 自分の位置情報
     private LocationData oppLocationData; // 相手の位置情報
@@ -159,13 +165,17 @@ public class RaderActivity extends Activity {
         button_info = (Button)findViewById( R.id.button_info );
         textView_info = (TextView)findViewById( R.id.textView_info );
 
+        // WebRTCのフラグメント
+        shareCamFragment = (ShareCameraViewFragment)getFragmentManager().findFragmentById( R.id.fragment_shareCameraView );
+        shareCamFragment.setUserInfo( myID, myName, oppID, oppName );
+
+//        hideFragment( shareCamFragment ); // とりあえず非表示で
 
         // リスナのセット
         button_ShareCamera.setOnClickListener(onClick_ButtonShareCameraListener);
         button_Vibration.setOnClickListener(onClick_ButtonVibrationListener);
         switch_AR.setOnClickListener(onClick_SwitchARListener);
         button_info.setOnClickListener(onClick_ButtonInfoListener);
-
 
 
         textView_WifiDirectMessage = (TextView)findViewById( R.id.textView_WifiDirectMessage );
@@ -193,7 +203,6 @@ public class RaderActivity extends Activity {
                 Log.d( "recieveChat@RaderAct", loc.dump() );
             }
         });
-
 
 
         textureView = (TextureView) findViewById( R.id.texture_view );
@@ -369,8 +378,9 @@ public class RaderActivity extends Activity {
 
         meepaApp = (MeePaApp)this.getApplication(); // グローバルクラス
         // グローバルクラスから自分・相手のID読み込み
-        myID = meepaApp.getSelfUserId();
-        oppID = meepaApp.getOpponentUserId();
+        myID    = meepaApp.getSelfUserId();
+        myName  = meepaApp.getSelfUserName();
+        oppID   = meepaApp.getOpponentUserId();
         oppName = meepaApp.getOpponentUserName();
 
         // 例外処理
@@ -667,6 +677,7 @@ public class RaderActivity extends Activity {
     // [振動止める/つける]ボタン押下
     private View.OnClickListener onClick_ButtonVibrationListener =new View.OnClickListener() {
         public void onClick(View v) {
+
             if( button_Vibration.isChecked() == true ) { // OFF → ONのとき
                 flag_vibrator = true;
             }
@@ -789,4 +800,24 @@ public class RaderActivity extends Activity {
         }
     }
 
+
+
+    private void hideFragment( Fragment fragment ) {
+        if ( fragment == null ) return;
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .hide( fragment )
+                .commit();
+    }
+
+
+    private void showFragment( Fragment fragment ) {
+        if ( fragment == null ) return;
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .show( shareCamFragment )
+                .commit();
+    }
 }
