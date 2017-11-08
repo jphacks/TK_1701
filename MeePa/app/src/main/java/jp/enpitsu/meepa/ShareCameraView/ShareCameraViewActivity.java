@@ -161,7 +161,7 @@ public class ShareCameraViewActivity extends Activity {
                 if (!_bConnected) { // どこにも接続してないとき
 
                     // Select remote peer & make a call
-                    showPeerIDs(); // 発信先のPeerIDを取得
+//                    showPeerIDs(); // 発信先のPeerIDを取得
                     //showPeerIDsメソッドでは、listAllPeersメソッドを利用して、接続先のPeerID一覧を取得
                 }
                 /////////////////////////////////////////////////////////////////////////////////////
@@ -384,14 +384,14 @@ public class ShareCameraViewActivity extends Activity {
         // 前面（FRONT），背面（BACK）どちらのカメラを使うか
         constraints.cameraPosition = MediaConstraints.CameraPositionEnum.BACK;
 
-//        // 取得と再生
-//        Navigator.initialize(_peer);								// Navigatorクラスの初期化
-//        _localStream = Navigator.getUserMedia(constraints);		// getUserMediaメソッドの引数にconstraintsを指定
-//        // 自分のカメラ映像（ローカルストリーム）が取得可能
-//
-//        Canvas canvas = (Canvas) findViewById(R.id.svLocalView);	// 映像表示用のcanvas
-//        // 取得したMediaStreamオブジェクトにビデオレンダラー(表示用のCanvasオブジェクト)を割り当て
-//        _localStream.addVideoRenderer(canvas,0);
+        // 取得と再生
+        Navigator.initialize(_peer);								// Navigatorクラスの初期化
+        _localStream = Navigator.getUserMedia(constraints);		// getUserMediaメソッドの引数にconstraintsを指定
+        // 自分のカメラ映像（ローカルストリーム）が取得可能
+
+        Canvas canvas = (Canvas) findViewById(R.id.svLocalViewAc);	// 映像表示用のcanvas
+        // 取得したMediaStreamオブジェクトにビデオレンダラー(表示用のCanvasオブジェクト)を割り当て
+        _localStream.addVideoRenderer(canvas,0);
 
     }
 
@@ -642,5 +642,6 @@ public class ShareCameraViewActivity extends Activity {
             finish();
         }
     };
+
 
 }

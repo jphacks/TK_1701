@@ -16,11 +16,21 @@
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:id="@+id/svRemoteView"
+        android:id="@+id/svRemoteViewAc"
         android:layout_marginTop="8dp"
         android:visibility="gone"
         />
-
+    <view
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        class="io.skyway.Peer.Browser.Canvas"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/svLocalViewAc"
+        android:layout_marginTop="8dp"
+        />
     <!--カメラプレビュー-->
     <TextureView
         android:id="@+id/texture_view"

@@ -2,9 +2,11 @@ package jp.enpitsu.meepa.Rader;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
@@ -38,6 +40,8 @@ import android.widget.ToggleButton;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import io.skyway.Peer.Peer;
+import io.skyway.Peer.PeerOption;
 import jp.enpitsu.meepa.Global.MeePaApp;
 import jp.enpitsu.meepa.Lookfor.LookActivity;
 import jp.enpitsu.meepa.Rader.ARObjects.OpenGLES20.MyGLSurfaceView;
@@ -129,6 +133,8 @@ public class RaderActivity extends Activity {
 
         permissionManager = new PermissionManager( this );
 
+
+
         final View view = this.getLayoutInflater().inflate(R.layout.activity_rader, null);
 
         // GLSurfaceViewを最初にセット
@@ -142,6 +148,22 @@ public class RaderActivity extends Activity {
 
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
+        // WebRTCのフラグメントと渡すデータ
+        Bundle bundle = new Bundle();
+        bundle.putString( "selfID",   myID  );
+        bundle.putString( "selfName", myName);
+        bundle.putString( "oppID",    oppID );
+        bundle.putString( "oppID",   oppName);
+
+        shareCamFragment = new ShareCameraViewFragment();
+        shareCamFragment.setArguments( bundle );
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .add( R.id.relativeLayout_fragment, shareCamFragment )
+                .commit();
+        hideFragment( shareCamFragment ); // とりあえず非表示で
 
 
         // レイアウト(xml)との結びつけ
@@ -165,11 +187,6 @@ public class RaderActivity extends Activity {
         button_info = (Button)findViewById( R.id.button_info );
         textView_info = (TextView)findViewById( R.id.textView_info );
 
-        // WebRTCのフラグメント
-        shareCamFragment = (ShareCameraViewFragment)getFragmentManager().findFragmentById( R.id.fragment_shareCameraView );
-        shareCamFragment.setUserInfo( myID, myName, oppID, oppName );
-
-//        hideFragment( shareCamFragment ); // とりあえず非表示で
 
         // リスナのセット
         button_ShareCamera.setOnClickListener(onClick_ButtonShareCameraListener);
@@ -655,6 +672,7 @@ public class RaderActivity extends Activity {
         }
     };
 
+
     public void startARMode() {
         RADER_VALUES.switchARMode( true );
         // カメラ起動
@@ -694,9 +712,24 @@ public class RaderActivity extends Activity {
     private View.OnClickListener onClick_ButtonShareCameraListener =new View.OnClickListener() {
         public void onClick(View v) {
 
-            // SkyWay（WebRTC）のアクティビティ
-            Intent intent_find = new Intent(RaderActivity.this, ShareCameraViewActivity.class);
-            startActivity(intent_find);
+            if ( shareCamFragment.isExistPeerID() && (!shareCamFragment.isConnected()) ) { // Peer発行済かつまだ接続どこにもしていない時
+
+                shareCamFragment.showPeerIDs();
+
+            } else if ( !shareCamFragment.isExistPeerID() ){ // 自分のPeerIDが発行されてない場合
+
+                Toast.makeText(RaderActivity.this, "PeerIDが発行されていません\n時間を置いて再度試してください", Toast.LENGTH_SHORT).show();
+                shareCamFragment.createPeer();
+
+            } else if ( shareCamFragment.isConnected() ) { // 既に接続中の場合
+
+                Toast.makeText(RaderActivity.this, "現在接続中です", Toast.LENGTH_SHORT).show();
+
+            }
+
+//            // SkyWay（WebRTC）のアクティビティ
+//            Intent intent_find = new Intent(RaderActivity.this, ShareCameraViewActivity.class);
+//            startActivity(intent_find);
 
         }
     };
@@ -820,4 +853,8 @@ public class RaderActivity extends Activity {
                 .show( shareCamFragment )
                 .commit();
     }
+
+    public void requestShowFragment() { showFragment( shareCamFragment ); }
+
+    public void requestHideFragment() { hideFragment( shareCamFragment ); }
 }
