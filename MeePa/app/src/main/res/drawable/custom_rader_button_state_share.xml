@@ -4,6 +4,6 @@
         android:state_pressed="true" />
     <item android:drawable="@drawable/rader_button_sharecamera"
         android:state_checked="true" />
-    <item android:drawable="@drawable/rader_button_sharecamera"
+    <item android:drawable="@drawable/rader_button_vibe_off"
         android:state_checked="false" />
 </selector>

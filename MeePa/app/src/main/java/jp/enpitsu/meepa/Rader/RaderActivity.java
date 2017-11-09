@@ -30,6 +30,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -47,6 +48,7 @@ import jp.enpitsu.meepa.Lookfor.LookActivity;
 import jp.enpitsu.meepa.Rader.ARObjects.OpenGLES20.MyGLSurfaceView;
 import jp.enpitsu.meepa.R;
 import jp.enpitsu.meepa.Rader.ARObjects.OpenGLES20.RADER_VALUES;
+import jp.enpitsu.meepa.Rader.ARObjects.OpenGLES20.TargetObject;
 import jp.enpitsu.meepa.Rader.ShareCamera.ShareCameraViewFragment;
 import jp.enpitsu.meepa.ShareCameraView.ShareCameraViewActivity;
 import jp.enpitsu.meepa.WiFiDirect.WiFiDirect;
@@ -190,6 +192,7 @@ public class RaderActivity extends Activity {
 
         // リスナのセット
         button_ShareCamera.setOnClickListener(onClick_ButtonShareCameraListener);
+        button_ShareCamera.setOnCheckedChangeListener(onStateChanged_ButtonShareCameraListener);
         button_Vibration.setOnClickListener(onClick_ButtonVibrationListener);
         switch_AR.setOnClickListener(onClick_SwitchARListener);
         button_info.setOnClickListener(onClick_ButtonInfoListener);
@@ -712,25 +715,58 @@ public class RaderActivity extends Activity {
     private View.OnClickListener onClick_ButtonShareCameraListener =new View.OnClickListener() {
         public void onClick(View v) {
 
-            if ( shareCamFragment.isExistPeerID() && (!shareCamFragment.isConnected()) ) { // Peer発行済かつまだ接続どこにもしていない時
+            if( button_ShareCamera.isChecked() == true ) { // OFF → ONのとき
 
-                shareCamFragment.showPeerIDs();
+                if ( shareCamFragment.isExistPeerID() && (!shareCamFragment.isConnected()) ) { // Peer発行済かつまだ接続どこにもしていない時
 
-            } else if ( !shareCamFragment.isExistPeerID() ){ // 自分のPeerIDが発行されてない場合
+                    shareCamFragment.showPeerIDs();
 
-                Toast.makeText(RaderActivity.this, "PeerIDが発行されていません\n時間を置いて再度試してください", Toast.LENGTH_SHORT).show();
-                shareCamFragment.createPeer();
+                } else if ( !shareCamFragment.isExistPeerID() ){ // 自分のPeerIDが発行されてない場合
 
-            } else if ( shareCamFragment.isConnected() ) { // 既に接続中の場合
+                    Toast.makeText(RaderActivity.this, "PeerIDが発行されていません\n時間を置いて再度試してください", Toast.LENGTH_SHORT).show();
+                    button_ShareCamera.setChecked( false );
 
-                Toast.makeText(RaderActivity.this, "現在接続中です", Toast.LENGTH_SHORT).show();
+                } else if ( shareCamFragment.isConnected() ) { // 既に接続中の場合
+
+                    Toast.makeText(RaderActivity.this, "現在接続中です", Toast.LENGTH_SHORT).show();
+                    button_ShareCamera.setChecked( true );
+
+                }
 
             }
+            else { // ON → OFFのとき
 
-//            // SkyWay（WebRTC）のアクティビティ
-//            Intent intent_find = new Intent(RaderActivity.this, ShareCameraViewActivity.class);
-//            startActivity(intent_find);
+                shareCamFragment.requestCloseConnectoion();
+                hideFragment( shareCamFragment );
+                button_ShareCamera.setChecked( false );
 
+            }
+        }
+    };
+
+    // WebRTCなカメラ映像シェアボタンの状態変化を見守る
+    // ARでのカメラ利用の競合を避ける
+    private CompoundButton.OnCheckedChangeListener
+            onStateChanged_ButtonShareCameraListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton button, boolean b) {
+            if ( button.isChecked() ) { // ONになる時
+                if ( switch_AR.isChecked() ) { // ARがONのとき
+                    toast( "AR機能利用中は利用できません", Toast.LENGTH_SHORT, Gravity.CENTER );
+                    button.setChecked( false );
+                    return;
+                }
+                // ARとレーダー関係の非表示
+                findViewById( R.id.textView_AR ).setVisibility( View.INVISIBLE );
+                switch_AR.setVisibility( View.INVISIBLE );
+                glView.setVisibility( View.INVISIBLE );
+            }
+            else { // OFFになるとき
+                // ARとレーダー関係の表示
+                findViewById( R.id.textView_AR ).setVisibility( View.VISIBLE );
+                switch_AR.setVisibility( View.VISIBLE );
+                glView.setVisibility( View.VISIBLE );
+            }
         }
     };
 
@@ -749,50 +785,6 @@ public class RaderActivity extends Activity {
 
         }
     };
-
-//    // [振動止める/つける]ボタン押下
-//    public void onVibeSwitchClicked( View v ) {
-//        if( button_Vibration.isChecked() == true ) { // OFF → ONのとき
-//            flag_vibrator = true;
-//        }
-//        else { // ON → OFFのとき
-//            flag_vibrator = false;
-//            // 現在動作中の振動も止める
-//            vibrator.cancel();
-//        }
-//    }
-
-//    public void onARSwitchButtonClicked(View v) {
-//        if( switch_AR.isChecked() == true ) { // OFF → ONのとき
-//
-//            // パーミッションを持っているか確認する
-//            if (PermissionChecker.checkSelfPermission(
-//                    RaderActivity.this, Manifest.permission.CAMERA)
-//                    != PackageManager.PERMISSION_GRANTED) {
-//                // パーミッションをリクエストする
-//                permissionManager.requestCameraPermission();
-//                return;
-//            }
-//            Log.d( "REQUEST PERMISSION", "パーミッション取得済み" );
-//            // ARモード開始
-//            startARMode();
-//        }
-//        else { // ON → OFFのとき
-//            // ARモード終了
-//            RADER_VALUES.switchARMode( false );
-//            // カメラ開放
-//            mCamera.close();
-//            mCamera = null;
-//            // 背景差し替え(imageView表示)
-////            backgroundImageView.setVisibility( backgroundImageView.VISIBLE );
-//            // AR用メッセージ非表示
-//            linearLayout_ARMessages.setVisibility( View.GONE );
-//            // レーダー用メッセージ表示
-//            linearLayout_raderMessages.setVisibility( View.VISIBLE );
-//        }
-//    }
-
-
 
 
 
@@ -854,7 +846,28 @@ public class RaderActivity extends Activity {
                 .commit();
     }
 
-    public void requestShowFragment() { showFragment( shareCamFragment ); }
+    public void requestShowFragment() {
+        showFragment( shareCamFragment );
+        button_ShareCamera.setChecked( true );
+    }
 
-    public void requestHideFragment() { hideFragment( shareCamFragment ); }
+    public void requestHideFragment() {
+        hideFragment( shareCamFragment );
+        button_ShareCamera.setChecked( false );
+    }
+
+
+    /*
+     * Toast
+     * 引数   msg         : 表示するメッセージ
+     *        time_length : メッセージを表示する時間
+     *        gravity     : メッセージ表示位置
+     */
+    private void toast( String msg, int time_length, int gravity ) {
+
+        Toast toast = Toast.makeText( RaderActivity.this, msg, time_length );
+        toast.setGravity( gravity, 0, 0 );
+        toast.show();
+    }
+
 }

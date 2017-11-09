@@ -141,127 +141,7 @@ public class ShareCameraViewFragment extends Fragment {
         // Initialize Peer
         // PeerOptionクラスを利用し、APIキー、ドメイン名、デバッグレベルを指定
         //
-        PeerOption option = new PeerOption();
-        option.key = API_KEY;
-        option.domain = DOMAIN;
-        option.debug = Peer.DebugLevelEnum.ALL_LOGS;
-
-        _peer = new Peer( activity, selfID, option ); // 自分のIDをPeerIDとしてPeerID発行
-
-        //
-        // Set Peer event callbacks
-        // 接続成功・失敗・切断時の処理
-        //
-
-        // OPEN
-        // このイベント成功後にいろいろ行われるよ
-		/*
-		 * PeerIDと呼ばれるクライアント識別用のIDがシグナリングサーバで発行され、
-		 * コールバックイベントで取得できます。
-		 * PeerIDはクライアントサイドで指定することもできます。
-		 */
-        _peer.on(Peer.PeerEventEnum.OPEN, new OnCallback() {
-            @Override
-            public void onCallback(Object object) {
-                // PeerIDが発行されたらそれを表示
-                // Show my ID
-                _strOwnId = (String) object;
-                _bExistPeerID = true;
-                Log.d(TAG, "【MY PEER ID】 " + _strOwnId);
-//                TextView tvOwnId = (TextView) findViewById( R.id.tvOwnId );
-//                tvOwnId.setText(myName + " ( ID : " + _strOwnId + " )");
-
-            }
-        });
-
-
-        // Request permissions
-        // カメラ，(音声)のパーミッション
-        if (ContextCompat.checkSelfPermission(activity,
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-//                && ContextCompat.checkSelfPermission(activity,
-//                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-                ) {
-//            ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},0);
-            ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.CAMERA},0);
-        }
-        else {
-            // 権限がある場合
-            // Get a local MediaStream & show it
-//            startLocalStream(); // 映像，音声の取得開始
-        }
-
-
-        // ERROR
-        // 何かしらエラーが発生したら呼ばれる→ログ表示
-        _peer.on(Peer.PeerEventEnum.ERROR, new OnCallback() {
-            @Override
-            public void onCallback(Object object) {
-                PeerError error = (PeerError) object;
-                Log.d(TAG, "[On/Error]" + error);
-            }
-        });
-
-        // CLOSE
-        // Peer（相手）との接続が切れた際に呼ばれる
-        _peer.on(Peer.PeerEventEnum.CLOSE, new OnCallback()	{
-            @Override
-            public void onCallback(Object object) {
-                Log.d(TAG, "[On/Close]");
-            }
-        });
-
-        // DISCONNECTED
-        // シグナリングサーバとの接続が切れた際に呼ばれる
-        _peer.on(Peer.PeerEventEnum.DISCONNECTED, new OnCallback() {
-            @Override
-            public void onCallback(Object object) {
-                Log.d(TAG, "[On/Disconnected]");
-            }
-        });
-
-        // CALL (Incoming call)
-        // 着信処理
-        // 相手から接続要求がきた場合に応答
-        _peer.on(Peer.PeerEventEnum.CALL, new OnCallback() {
-            @Override
-            public void onCallback(Object object) { // 引数として相手との接続を管理するためのMediaConnectionオブジェクトが取得できる
-                if (!(object instanceof MediaConnection)) {
-                    return;
-                }
-
-                _mediaConnection = (MediaConnection) object;
-
-                // TODO : ここで接続確認ダイアログ /////////////////////////////////////////////////
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("接続要求")
-                        .setMessage("相手が視点共有をしたいようです\n自分の視点（カメラ映像）を相手に共有しますか？")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // OK button pressed
-                                activity.requestShowFragment();
-                                startLocalStream(); // 自分側の映像取得開始
-
-                                setMediaCallbacks();
-                                _mediaConnection.answer(_localStream); // 接続要求に応答
-                                // 引数に相手に送信する映像・音声（自分のストリーム）
-
-                                _bConnected = true;
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
-
-                // TODO : 切断処理
-                _mediaConnection.close();
-                _bConnected = false;
-
-                activity.requestHideFragment();
-
-//                updateActionButtonTitle();
-            }
-        });
+        initPeer();
 
     }
 
@@ -432,6 +312,8 @@ public class ShareCameraViewFragment extends Fragment {
 
             _peer = null;
         }
+
+        activity.requestHideFragment();
     }
 
 
@@ -474,7 +356,6 @@ public class ShareCameraViewFragment extends Fragment {
             return;
         }
 
-
         Canvas canvas = (Canvas)view.findViewById(R.id.svRemoteView);
         _remoteStream.removeVideoRenderer(canvas,0); // MediaStreamに割り当てられたビデオレンダラを取り外し
         _remoteStream.close();
@@ -516,10 +397,10 @@ public class ShareCameraViewFragment extends Fragment {
     // Listing all peers
     //
     // showPeerIDsメソッドでは、listAllPeersメソッドを利用して、接続先のPeerID一覧を取得します。
-    public int showPeerIDs() {
+    public void showPeerIDs() {
         if ((null == _peer) || (null == _strOwnId) || (0 == _strOwnId.length())) {
             Toast.makeText(activity, "Your PeerID is null or invalid.", Toast.LENGTH_SHORT).show();
-            return -1;
+            return;
         }
 
         // Get all IDs connected to the server
@@ -562,12 +443,11 @@ public class ShareCameraViewFragment extends Fragment {
                     }
                 }
                 else{
-                    Toast.makeText(fContext, "PeerID list (other than your ID) is empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fContext, "PeerID list (other than your ID) is empty. \n 時間を置いて再試行してください", Toast.LENGTH_SHORT).show();
+                    activity.requestHideFragment();
                 }
             }
         });
-
-        return 0;
     }
 
 
@@ -596,7 +476,7 @@ public class ShareCameraViewFragment extends Fragment {
     public boolean isExistPeerID() { return _bExistPeerID; }
     public boolean isConnected() { return _bConnected; }
 
-    public void createPeer() {
+    private void initPeer() {
         //
         // Initialize Peer
         // PeerOptionクラスを利用し、APIキー、ドメイン名、デバッグレベルを指定
@@ -607,6 +487,135 @@ public class ShareCameraViewFragment extends Fragment {
         option.debug = Peer.DebugLevelEnum.ALL_LOGS;
 
         _peer = new Peer( activity, selfID, option ); // 自分のIDをPeerIDとしてPeerID発行
+
+
+        //
+        // Set Peer event callbacks
+        // 接続成功・失敗・切断時の処理
+        //
+
+        // OPEN
+        // このイベント成功後にいろいろ行われるよ
+		/*
+		 * PeerIDと呼ばれるクライアント識別用のIDがシグナリングサーバで発行され、
+		 * コールバックイベントで取得できます。
+		 * PeerIDはクライアントサイドで指定することもできます。
+		 */
+        _peer.on(Peer.PeerEventEnum.OPEN, new OnCallback() {
+            @Override
+            public void onCallback(Object object) {
+                // PeerIDが発行されたらそれを表示
+                // Show my ID
+                _strOwnId = (String) object;
+                _bExistPeerID = true;
+                Log.d(TAG, "【MY PEER ID】 " + _strOwnId);
+//                TextView tvOwnId = (TextView) findViewById( R.id.tvOwnId );
+//                tvOwnId.setText(myName + " ( ID : " + _strOwnId + " )");
+
+            }
+        });
+
+
+        // Request permissions
+        // カメラ，(音声)のパーミッション
+        if (ContextCompat.checkSelfPermission(activity,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+//                && ContextCompat.checkSelfPermission(activity,
+//                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+                ) {
+//            ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},0);
+            ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.CAMERA},0);
+        }
+        else {
+            // 権限がある場合
+            // Get a local MediaStream & show it
+//            startLocalStream(); // 映像，音声の取得開始
+        }
+
+
+        // ERROR
+        // 何かしらエラーが発生したら呼ばれる→ログ表示
+        _peer.on(Peer.PeerEventEnum.ERROR, new OnCallback() {
+            @Override
+            public void onCallback(Object object) {
+                PeerError error = (PeerError) object;
+                Log.d(TAG, "[On/Error]" + error);
+            }
+        });
+
+        // CLOSE
+        // Peer（相手）との接続が切れた際に呼ばれる
+        _peer.on(Peer.PeerEventEnum.CLOSE, new OnCallback()	{
+            @Override
+            public void onCallback(Object object) {
+                Log.d(TAG, "[On/Close]");
+            }
+        });
+
+        // DISCONNECTED
+        // シグナリングサーバとの接続が切れた際に呼ばれる
+        _peer.on(Peer.PeerEventEnum.DISCONNECTED, new OnCallback() {
+            @Override
+            public void onCallback(Object object) {
+                Log.d(TAG, "[On/Disconnected]");
+            }
+        });
+
+        // CALL (Incoming call)
+        // 着信処理
+        // 相手から接続要求がきた場合に応答
+        _peer.on(Peer.PeerEventEnum.CALL, new OnCallback() {
+            @Override
+            public void onCallback(Object object) { // 引数として相手との接続を管理するためのMediaConnectionオブジェクトが取得できる
+                if (!(object instanceof MediaConnection)) {
+                    return;
+                }
+
+                _mediaConnection = (MediaConnection) object;
+
+                // TODO : ここで接続確認ダイアログ /////////////////////////////////////////////////
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("接続要求")
+                        .setMessage("相手が視点共有をしたいようです\n自分の視点（カメラ映像）を相手に共有しますか？")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // OK button pressed
+                                activity.requestShowFragment();
+                                startLocalStream(); // 自分側の映像取得開始
+
+                                setMediaCallbacks();
+                                _mediaConnection.answer(_localStream); // 接続要求に応答
+                                // 引数に相手に送信する映像・音声（自分のストリーム）
+
+                                _bConnected = true;
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // [キャンセル]ボタン押下
+                                // TODO : 切断処理
+                                if ( _bConnected == false ) {
+                                    _mediaConnection.close();
+                                    closeRemoteStream();
+                                    activity.requestHideFragment();
+                                }
+                            }
+                        })
+                        .show();
+
+//                updateActionButtonTitle();
+            }
+        });
     }
+
+    public void requestCloseConnectoion() {
+
+        destroyPeer(); // 一旦全て破棄
+        initPeer();
+
+    }
+
 
 }

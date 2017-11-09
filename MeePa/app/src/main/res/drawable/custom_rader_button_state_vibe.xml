@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/rader_button_vibe"
+    <item android:drawable="@drawable/rader_button_vibe_shadow"
         android:state_pressed="true" />
-    <item android:drawable="@drawable/rader_button_vibe"
+    <item android:drawable="@drawable/rader_button_vibe_shadow"
         android:state_checked="true" />
-    <item android:drawable="@drawable/rader_button_non_vibe"
+    <item android:drawable="@drawable/rader_button_vibe_off_shadow"
         android:state_checked="false" />
 </selector>

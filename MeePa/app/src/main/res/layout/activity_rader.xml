@@ -39,6 +39,7 @@
         android:layout_margin="20dp"
         >
         <jp.enpitsu.meepa.Global.CustomTextView
+            android:id="@+id/textView_AR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorWhite"
@@ -46,6 +47,10 @@
             android:textSize="15dp"
             android:layout_gravity="center"
             android:layout_marginRight="5dp"
+            android:shadowColor="@color/colorBackground"
+            android:shadowDx="0.0"
+            android:shadowDy="10.0"
+            android:shadowRadius="0.0"
             />
         <Switch
             android:id="@+id/switch_AR"
